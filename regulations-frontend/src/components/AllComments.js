@@ -7,15 +7,17 @@ import CommentCard from './CommentCard';
 const Container = styled.div`
   width: 80%;
   min-height: 300px; // Adjust this value based on your needs
-  margin: 20px auto;
+  margin: 10px auto;
   background-color: ${props => props.bgColor || '#f0f0f0'};
   border: 2px solid #333;
   border-radius: 15px;
-  padding: 20px;
+  padding: 10px 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   box-sizing: border-box; // Ensures padding does not add to the width
+  max-height: 500px; /* Adjust as needed */
+  overflow-y: auto;
 `;
 
 const CommentsGrid = styled.div`
