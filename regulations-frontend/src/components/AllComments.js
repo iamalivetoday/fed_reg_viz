@@ -10,11 +10,11 @@ const Container = styled.div`
   margin: 10px auto;
   background-color: ${props => props.bgColor || '#f0f0f0'};
   border: 2px solid #333;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 15px;
   padding: 10px 20px;
   display: flex;
   flex-direction: column;
-  align-items: center;
   box-sizing: border-box; // Ensures padding does not add to the width
   max-height: 500px; /* Adjust as needed */
   overflow-y: auto;
@@ -28,26 +28,27 @@ const CommentsGrid = styled.div`
   padding: 10px; // Padding around the grid inside the container
 `;
 
-const AllComments = ({ comments, bgColor }) => {
-  const [activeComment, setActiveComment] = useState(null);
+const DefaultMessage = styled.p`
+  text-align: left;
+`;
 
+const AllComments = ({ comments, setActiveComment, activeComment,bgColor }) => {
   return (
     <Container bgColor={bgColor}>
-      <CommentsGrid>
-        {comments.map(comment => (
-          <Comment
-            key={comment.id}
-            color={comment.color}
-            onMouseEnter={() => setActiveComment(comment)}
-            onMouseLeave={() => setActiveComment(null)}
-          />
-        ))}
-      </CommentsGrid>
-      <br/>
-      {activeComment && (
-        <CommentCard commenter={activeComment.commenter} text={activeComment.text} />
-      )}
+    <DefaultMessage>Click on any icon to read the associated comment text.</DefaultMessage>
+    <CommentsGrid bgColor={bgColor}>
+      {comments.map(comment => (
+        <Comment
+          key={comment.id}
+          color={comment.color}
+          isActive={activeComment && activeComment.id === comment.id}
+          onClick={() => setActiveComment(comment)} // Update to onClick
+          // onMouseLeave={() => setActiveComment(null)} You can remove this if you're using onClick
+        />
+      ))}
+    </CommentsGrid>
     </Container>
+
   );
 };
 
