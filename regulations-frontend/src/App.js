@@ -15,7 +15,7 @@ const App = () => {
       .then(response => {
         const fetchedComments = response.data.map(comment => ({
           id: comment.id,
-          color: 'green', // Setting all comments to green for now
+          color: comment.color,
           commenter: { firstName: comment.name.split(' ')[0], lastName: comment.name.split(' ')[1] },
           text: comment.text,
         }));

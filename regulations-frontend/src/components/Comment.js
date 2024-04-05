@@ -17,28 +17,18 @@ const CommentBox = styled.div`
 `;
 
 const Comment = ({ color, onClick, isActive }) => {
-  let backgroundColor;
-  switch (color) {
-    case 'green':
-      backgroundColor = 'lightgreen';
-      break;
-    case 'yellow':
-      backgroundColor = 'yellow';
-      break;
-    case 'red':
-      backgroundColor = 'lightcoral';
-      break;
-    default:
-      backgroundColor = 'white';
-  }
-
+  //console.log(color)
+  
   return (
     <CommentBox
+      color={color} // Pass the dynamic color as bgColor
       isActive={isActive}
-      onClick={onClick} style={{ backgroundColor: color }}
+      onClick={onClick}
+      style={{ borderColor: isActive ? 'gold' : 'black', boxShadow: isActive ? '0 0 10px gold' : 'none' }}
     >
       {/* Content goes here */}
     </CommentBox>
   );
 };
+
 export default Comment;
