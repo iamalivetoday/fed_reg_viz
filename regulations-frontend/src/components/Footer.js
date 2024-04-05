@@ -5,18 +5,20 @@ import { FaHeart } from 'react-icons/fa';
 const FooterContainer = styled.footer`
   width: 100%;
   padding: 1rem;
-  color: black;
+  color: white;
+  background: #13151C; /* Dark background color */
   text-align: center;
   position: flex;
   bottom: 0;
 `;
 
 const MadeleineLink = styled.a`
-  color: black;
+  color: white;
   text-decoration: none;
+  
 
   &:hover {
-    color: black;
+    color: white;
     font-style: italic;
     text-decoration: none;
   }
@@ -25,7 +27,7 @@ const MadeleineLink = styled.a`
 const Footer = () => {
   return (
     <FooterContainer>
-      Made with <FaHeart style={{ color: 'black' }} />  by    
+      Made with  <FaHeart style={{ color: 'white' }} />   by    
       <MadeleineLink href="https://whenwereachwe.net" target="_blank" rel="noopener noreferrer"> Madeleine</MadeleineLink>
     </FooterContainer>
   );

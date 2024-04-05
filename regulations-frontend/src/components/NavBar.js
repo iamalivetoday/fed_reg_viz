@@ -1,6 +1,6 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 const NavBarContainer = styled.nav`
   display: flex;
@@ -11,8 +11,8 @@ const NavBarContainer = styled.nav`
 `;
 
 const NavLink = styled(Link)`
-  padding: 10px 30px;
-  margin: 0; /* Spacing between links */
+  padding: 10px 20px;
+  margin: 0 40px; /* Spacing between links */
   text-decoration: none;
   color: white;
   border-radius: 20px;
@@ -27,17 +27,19 @@ const NavLink = styled(Link)`
   }
 `;
 
+
 const Navbar = () => {
+
   return (
-    <NavBarContainer>
-      <NavLink to="/">Home</NavLink>
-      <NavLink to="/about">About</NavLink>
-      <NavLink to="/dockets">Agencies</NavLink>
-      <NavLink to="/dockets">Dockets</NavLink>
-    </NavBarContainer>
+    <>
+      <NavBarContainer>
+        <NavLink to="/">Home</NavLink>
+        <NavLink to="/about">About</NavLink>
+        <NavLink to="/dockets">Agencies</NavLink>
+        <NavLink to="/onedocket">One Docket</NavLink>
+      </NavBarContainer>
+    </>
   );
 };
-
-//      <NavLink to="/onedocket">One Docket</NavLink>
 
 export default Navbar;
