@@ -6,6 +6,7 @@ import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
 import DocketsPage from './pages/DocketsPage';
 import OneDocketPage from './pages/OneDocketPage';
+import Footer from './components/Footer';
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
         <Route path="/dockets" element={<DocketsPage />} />
         <Route path="/onedocket" element={<OneDocketPage/>} />
       </Routes>
+      <Footer />
     </Router>
   );
 };
