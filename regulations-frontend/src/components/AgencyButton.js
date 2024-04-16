@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 const Button = styled.button`
   background-color: darkblue;
@@ -10,9 +10,12 @@ const Button = styled.button`
   margin: 5px;
   cursor: pointer;
   font-size: 16px;
+  position: relative; // Add this for tooltip positioning
 
   &:hover {
     opacity: 0.8;
+    outline: 2px solid gold; // Gold outline on hover
+    box-shadow: 0 0 10px gold; // Gold shadow on hover
   }
 
   &:focus {
@@ -20,10 +23,31 @@ const Button = styled.button`
   }
 `;
 
-const AgencyButton = ({ agencyId, onClick }) => {
+// Added Tooltip for full name display
+const Tooltip = styled.div`
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -60px;
+
+  ${Button}:hover & {
+    visibility: visible;
+  }
+`;
+
+const AgencyButton = ({ agencyId, fullAgencyName, onClick }) => {
   return (
     <Button onClick={() => onClick(agencyId)}>
       {agencyId}
+      <Tooltip>{fullAgencyName}</Tooltip>
     </Button>
   );
 };

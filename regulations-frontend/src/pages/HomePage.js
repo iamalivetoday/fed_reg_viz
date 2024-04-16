@@ -1,83 +1,82 @@
 import React, { useEffect, useState } from 'react';
-import styled, { css, keyframes } from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { BsArrowDownCircle } from 'react-icons/bs';
-
-// Define words for the typewriter effect
-const words = ["Americans", "you", "our neighbors", "I", "we", "the people", "other families"];
+import HomeNavBar from '../components/HomeNavBar';
+const words = ["we", "the people", "Americans", "you", "working people", "our neighbors", "ordinary people", "other families"];
 
 const HomePageContainer = styled.div`
-  background: #13151C;
+  background-color: #13151C;
   color: white;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  padding: 80px;
   align-items: center;
+  justify-content: center;
 `;
 
 const Arrow = styled(BsArrowDownCircle)`
   color: white;
   font-size: 3rem;
   cursor: pointer;
-  margin-top: 2rem;
+  margin-top: 30px;
 `;
 
 const ContentSection = styled.section`
   color: white;
   background: #13151C;
-  padding: 4rem;
-  margin-top: -4rem;
+  padding: 8rem;
 `;
 
 const LoremIpsum = styled.p`
   margin-top: 2rem;
 `;
 
-const typing = keyframes`
-  from { width: 0 }
-  to { width: 100% }
+const StyledText = styled.div`
+  font-size: 5em;
+  text-align: left;
 `;
 
-const erasing = keyframes`
-  from { width: 100%; }
-  to { width: 0; }
-`;
-
-const blinkCaret = keyframes`
-  50% { border-color: transparent; }
-`;
-
-const TextWrapper = styled.div`
-  text-align: center;
-  font-size: 5rem;
-  padding: 2rem;
-`;
-
-const DynamicText = styled.span`
+const DynamicTextContainer = styled.div`
   display: inline-block;
-  white-space: nowrap;
-  overflow: hidden;
-  border-right: 2px solid white;
-  animation: ${({ animate }) => css`
-    ${animate === "typing" ? typing : erasing} 4s steps(30, end) forwards,
-    ${blinkCaret} 0.75s step-end infinite
-  `};
+  width: 800px; // Adjust the width based on the widest word
+  text-align: left;
+`;
+
+const fadeInOut = keyframes`
+  0% { opacity: 0; }
+  40% { opacity: 0.4; }
+  50% { opacity: 0.5; }
+  60% { opacity: 0.4; }
+  100% { opacity: 0; }
+`;
+
+const DynamicWord = styled.span`
+  font-size: 1.5em;
+  animation: ${fadeInOut} 10s ease-in-out infinite;
 `;
 
 const HomePage = () => {
   const [wordIndex, setWordIndex] = useState(0);
-  const [animate, setAnimate] = useState("typing");
+  const [isSticky, setIsSticky] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const shouldBeSticky = window.scrollY > 150; // Adjust based on your layout
+      setIsSticky(shouldBeSticky);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      setAnimate((prevAnimate) => (prevAnimate === "typing" ? "erasing" : "typing"));
-      if (animate === "erasing") {
-        setWordIndex((prevIndex) => (prevIndex + 1) % words.length);
-      }
-    }, 8000); // Change the animation cycle every 8 seconds
+      setWordIndex(prevIndex => (prevIndex + 1) % words.length);
+    }, 10000);
 
     return () => clearInterval(intervalId);
-  }, [animate, wordIndex]);
+  }, []);
 
   const scrollToContent = () => {
     window.scrollTo({ top: window.innerHeight, behavior: "smooth" });
@@ -86,16 +85,19 @@ const HomePage = () => {
   return (
     <>
       <HomePageContainer>
-        <TextWrapper>
-          What do <br />
-          <DynamicText animate={animate}>{words[wordIndex]}</DynamicText> <br />
-          think about <br />
-          these proposed regulations?
-        </TextWrapper>
+        <StyledText>
+          What do <br/>
+          <DynamicTextContainer>
+            <DynamicWord>{words[wordIndex]}</DynamicWord>
+          </DynamicTextContainer> <br/>
+          think about <br/>
+          our proposed regulations?<br/>
+        </StyledText>
+        <HomeNavBar sticky={isSticky} />
         <Arrow onClick={scrollToContent} />
       </HomePageContainer>
       <ContentSection>
-        <h1>About</h1>
+        <StyledText>About</StyledText>
         <LoremIpsum>Lorem ipsum dolor sit amet, consectetur adipiscing elit...</LoremIpsum>
       </ContentSection>
     </>
