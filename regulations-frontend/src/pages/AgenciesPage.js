@@ -1,6 +1,7 @@
 import React from 'react';
 import AgencyButton from '../components/AgencyButton'; // Adjust the path as needed
 import {useNavigate} from 'react-router-dom';
+import DocketsPage from './DocketsPage';
 
 const agencies = [
   { acronym: "EPA", fullName: "Environmental Protection Agency" },
@@ -30,7 +31,8 @@ const AgenciesPage = () => {
   const navigate = useNavigate();
 
   const handleAgencyClick = (agencyAcronym) => {
-    navigate(`/api/dockets/agency/${agencyAcronym}`);
+    navigate(<DocketsPage name={agencyAcronym}  />
+    );
   };
 
   return (

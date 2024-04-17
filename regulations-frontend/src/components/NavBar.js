@@ -35,8 +35,8 @@ const Navbar = () => {
       <NavBarContainer>
         <NavLink to="/">Home</NavLink>
         <NavLink to="/about">About</NavLink>
-        <NavLink to="/dockets">Agencies</NavLink>
-        <NavLink to="/onedocket">One Docket</NavLink>
+        <NavLink to="/agencies">Agencies</NavLink>
+        <NavLink to="/dockets">Dockets</NavLink>
       </NavBarContainer>
     </>
   );

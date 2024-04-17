@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { BsArrowDownCircle } from 'react-icons/bs';
 import HomeNavBar from '../components/HomeNavBar';
+import Dot from '../components/Dot';
+
 const words = ["we", "the people", "Americans", "you", "working people", "our neighbors", "ordinary people", "other families"];
 
 const HomePageContainer = styled.div`
@@ -76,6 +78,12 @@ const HomePage = () => {
     }, 10000);
 
     return () => clearInterval(intervalId);
+  }, []);
+
+  useEffect(() => {
+    const cursorControl = Dot({ element: document.body });
+
+    return () => cursorControl.destroy();
   }, []);
 
   const scrollToContent = () => {

@@ -8,6 +8,7 @@ const DocketsPage = () => {
   useEffect(() => {
     const fetchDockets = async () => {
       try {
+        console.log("fetching dockets from docketspage")
         const response = await fetch(`http://127.0.0.1:5000/api/dockets/agency/${agencyAcronym}`);
         if (!response.ok) throw new Error('Failed to fetch');
         const data = await response.json();
@@ -23,11 +24,7 @@ const DocketsPage = () => {
   return (
     <div>
       Dockets Page Content for {agencyAcronym}
-      <ul>
-        {dockets.map((docket) => (
-          <li key={docket.docketId}>{docket.docketId}</li>
-        ))}
-      </ul>
+
     </div>
   );
 };

@@ -7,7 +7,7 @@ const Button = styled.button`
   border: none;
   border-radius: 15px;
   padding: 10px 20px;
-  margin: 5px;
+  margin: 15px;
   cursor: pointer;
   font-size: 16px;
   position: relative; // Add this for tooltip positioning
