@@ -5,11 +5,12 @@ import HomeNavBar from '../components/HomeNavBar';
 import Dot from '../components/Dot';
 
 const words = ["we", "the people", "Americans", "you", "working people", "our neighbors", "ordinary people", "other families"];
+const colors = ["#FF6347", "#4682B4", "#32CD32", "#FFD700", "#FF69B4", "#00BFFF", "#8A2BE2"]; // Vibrant crayon box colors
 
 const HomePageContainer = styled.div`
   background-color: #13151C;
   color: white;
-  min-height: 100vh;
+  margin-top: 15%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -20,46 +21,58 @@ const Arrow = styled(BsArrowDownCircle)`
   color: white;
   font-size: 3rem;
   cursor: pointer;
-  margin-top: 30px;
+  margin-top: 10%;
 `;
 
-const ContentSection = styled.section`
-  color: white;
-  background: #13151C;
-  padding: 8rem;
-`;
-
-const LoremIpsum = styled.p`
-  margin-top: 2rem;
-`;
 
 const StyledText = styled.div`
-  font-size: 5em;
+  font-size: 7em;
   text-align: left;
 `;
 
+const AlignmentContainer = styled.div`
+  text-align: left;
+  margin-left: 10%;
+  margin-right: 10%;
+`;
+
+const StyledContent = styled.div`
+  font-size: 5em;
+  margin-left: 8%;
+  display: inline-block;
+`;
 const DynamicTextContainer = styled.div`
   display: inline-block;
-  width: 800px; // Adjust the width based on the widest word
-  text-align: left;
+  width: 100%; // Adjust the width based on the widest word
 `;
 
 const fadeInOut = keyframes`
-  0% { opacity: 0; }
-  40% { opacity: 0.4; }
-  50% { opacity: 0.5; }
-  60% { opacity: 0.4; }
-  100% { opacity: 0; }
+  0%, 100% { opacity: 0; }
+  25%, 50% { opacity: 1; }    // Full visibility quickly
+  75% { opacity: 0.6; }    /
 `;
+
 
 const DynamicWord = styled.span`
   font-size: 1.5em;
-  animation: ${fadeInOut} 10s ease-in-out infinite;
+  animation: ${fadeInOut} 10s ease-out infinite;  // Changed from 'ease-out' to 'linear' for a consistent speed
+  text-shadow: 1px 1px 4px #FFF; // White outline for legibility
+  color: ${props => props.color}
+`;
+
+const Subheading = styled.i`
+  margin-top: 10px;
+  font-size: 0.4em; // Adjust based on your preference
+`;
+
+const BodyText = styled.p`
+  font-size: 0.4em; // Adjust based on your preference
 `;
 
 const HomePage = () => {
   const [wordIndex, setWordIndex] = useState(0);
   const [isSticky, setIsSticky] = useState(false);
+  const [textColor, setTextColor] = useState(colors[0]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -74,17 +87,20 @@ const HomePage = () => {
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      setWordIndex(prevIndex => (prevIndex + 1) % words.length);
+      setWordIndex(prevIndex => {
+        let randomIndex;
+        do {
+          randomIndex = Math.floor(Math.random() * words.length);
+        } while (randomIndex === prevIndex); // Ensure the new index is different from the current one
+        return randomIndex;
+      });
+      setTextColor(colors[Math.floor(Math.random() * colors.length)]);
     }, 10000);
-
+  
     return () => clearInterval(intervalId);
   }, []);
 
-  useEffect(() => {
-    const cursorControl = Dot({ element: document.body });
 
-    return () => cursorControl.destroy();
-  }, []);
 
   const scrollToContent = () => {
     window.scrollTo({ top: window.innerHeight, behavior: "smooth" });
@@ -92,23 +108,37 @@ const HomePage = () => {
 
   return (
     <>
-      <HomePageContainer>
-        <StyledText>
-          What do <br/>
-          <DynamicTextContainer>
-            <DynamicWord>{words[wordIndex]}</DynamicWord>
-          </DynamicTextContainer> <br/>
-          think about <br/>
-          our proposed regulations?<br/>
-        </StyledText>
-        <HomeNavBar sticky={isSticky} />
-        <Arrow onClick={scrollToContent} />
-      </HomePageContainer>
-      <ContentSection>
-        <StyledText>About</StyledText>
-        <LoremIpsum>Lorem ipsum dolor sit amet, consectetur adipiscing elit...</LoremIpsum>
-      </ContentSection>
+      <AlignmentContainer>
+        <HomePageContainer>
+          <Dot />
+          <StyledText>
+            What do <br/>
+            <DynamicTextContainer>
+              <DynamicWord color={textColor}>{words[wordIndex]}</DynamicWord>
+            </DynamicTextContainer> <br/>
+            think about <br/>
+            our proposed regulations?<br/>
+          </StyledText>
+          <HomeNavBar sticky={isSticky} />
+          <Arrow onClick={scrollToContent} />
+        </HomePageContainer>
+        <HomePageContainer>
+          <Dot />
+          <StyledContent>
+            About <br />
+            <Subheading>Your voice in federal decision making</Subheading>
+            <BodyText>
+              <a href="https://www.regulations.gov">regulations.gov</a> is a federal website intended to Enable Public Access to Regulatory Materials, 
+              Increase Rulemaking participation, and improve Agencies' Efficiency & Effectiveness. 
+              This website, which is not an official website of the US government, uses the regulations.gov API 
+              to help make proposed regulatory materials easier to navigate.
+            </BodyText>
+          </StyledContent>
+        </HomePageContainer>
+      </AlignmentContainer>
+
     </>
+    
   );
 };
 

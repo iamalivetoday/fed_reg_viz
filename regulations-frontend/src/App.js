@@ -14,8 +14,8 @@ const App = () => {
       <Routes>
         <Route path="/" exact element={<LayoutWithNoNavbar />} />
         <Route path="/about" element={<LayoutWithNavbar><AboutPage /></LayoutWithNavbar>} />
-        <Route path="/dockets" element={<LayoutWithNavbar><AboutPage /></LayoutWithNavbar>} />
-        <Route path="/api/dockets/agency/:agencyAcronym" element={<LayoutWithNavbar><DocketsPage /></LayoutWithNavbar>} />
+        <Route path="/dockets/:agencyAcronym" element={<LayoutWithNavbar><DocketsPage /></LayoutWithNavbar>} />
+        <Route path="/dockets" element={<LayoutWithNavbar><DocketsPage /></LayoutWithNavbar>} />
         <Route path="/agencies" element={<LayoutWithNavbar><AgenciesPage /></LayoutWithNavbar>} />
       </Routes>
       <Footer />
