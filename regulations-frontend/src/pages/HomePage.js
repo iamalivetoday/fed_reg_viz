@@ -26,7 +26,7 @@ const Arrow = styled(BsArrowDownCircle)`
 
 
 const StyledText = styled.div`
-  font-size: 7em;
+  font-size: 3em;
   text-align: left;
 `;
 
@@ -37,7 +37,7 @@ const AlignmentContainer = styled.div`
 `;
 
 const StyledContent = styled.div`
-  font-size: 5em;
+  font-size: 3em;
   margin-left: 8%;
   display: inline-block;
 `;

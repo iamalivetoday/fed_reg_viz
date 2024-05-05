@@ -133,7 +133,6 @@ def dockets_by_agency_route(agency_acronym):
         # Assuming the direct JSON response is what you want to send back
         return jsonify(agency_dockets)
     except Exception as e:
-        # It's good practice to catch potential errors and return an appropriate response
         print(f"Error fetching dockets for agency {agency_acronym}: {e}")
         return jsonify({"error": "Failed to fetch dockets for the specified agency"}), 500
 
