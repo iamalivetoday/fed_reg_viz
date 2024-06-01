@@ -4,8 +4,8 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
 const ContentSection = styled.section`
-  color: white;
-  background: #13151C;
+  color: black;
+  background: white;
   padding: 20px;
 `;
 

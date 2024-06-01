@@ -2,15 +2,12 @@ import React, { useEffect, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { BsArrowDownCircle } from 'react-icons/bs';
 import HomeNavBar from '../components/HomeNavBar';
-import Dot from '../components/Dot';
-
-const words = ["we", "the people", "Americans", "you", "working people", "our neighbors", "ordinary people", "other families"];
-const colors = ["#FF6347", "#4682B4", "#32CD32", "#FFD700", "#FF69B4", "#00BFFF", "#8A2BE2"]; // Vibrant crayon box colors
+import Typewriter from 'typewriter-effect';
 
 const HomePageContainer = styled.div`
-  background-color: #13151C;
-  color: white;
-  margin-top: 15%;
+  background-color: white;
+
+  color: black;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -24,16 +21,9 @@ const Arrow = styled(BsArrowDownCircle)`
   margin-top: 10%;
 `;
 
-
 const StyledText = styled.div`
   font-size: 3em;
   text-align: left;
-`;
-
-const AlignmentContainer = styled.div`
-  text-align: left;
-  margin-left: 10%;
-  margin-right: 10%;
 `;
 
 const StyledContent = styled.div`
@@ -41,23 +31,11 @@ const StyledContent = styled.div`
   margin-left: 8%;
   display: inline-block;
 `;
-const DynamicTextContainer = styled.div`
-  display: inline-block;
-  width: 100%; // Adjust the width based on the widest word
-`;
 
 const fadeInOut = keyframes`
   0%, 100% { opacity: 0; }
   25%, 50% { opacity: 1; }    // Full visibility quickly
   75% { opacity: 0.6; }    /
-`;
-
-
-const DynamicWord = styled.span`
-  font-size: 1.5em;
-  animation: ${fadeInOut} 10s ease-out infinite;  // Changed from 'ease-out' to 'linear' for a consistent speed
-  text-shadow: 1px 1px 4px #FFF; // White outline for legibility
-  color: ${props => props.color}
 `;
 
 const Subheading = styled.i`
@@ -70,9 +48,7 @@ const BodyText = styled.p`
 `;
 
 const HomePage = () => {
-  const [wordIndex, setWordIndex] = useState(0);
   const [isSticky, setIsSticky] = useState(false);
-  const [textColor, setTextColor] = useState(colors[0]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -85,21 +61,6 @@ const HomePage = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      setWordIndex(prevIndex => {
-        let randomIndex;
-        do {
-          randomIndex = Math.floor(Math.random() * words.length);
-        } while (randomIndex === prevIndex); // Ensure the new index is different from the current one
-        return randomIndex;
-      });
-      setTextColor(colors[Math.floor(Math.random() * colors.length)]);
-    }, 10000);
-  
-    return () => clearInterval(intervalId);
-  }, []);
-
 
 
   const scrollToContent = () => {
@@ -108,22 +69,23 @@ const HomePage = () => {
 
   return (
     <>
-      <AlignmentContainer>
         <HomePageContainer>
-          <Dot />
           <StyledText>
             What do <br/>
-            <DynamicTextContainer>
-              <DynamicWord color={textColor}>{words[wordIndex]}</DynamicWord>
-            </DynamicTextContainer> <br/>
+            <Typewriter
+              options={{
+                strings: ["we", "the people", "Americans", "you", "working people", "our neighbors", "ordinary people", "other families"],
+                autoStart: true,
+                loop: true,
+              }}
+            />
             think about <br/>
-            our proposed regulations?<br/>
+            our proposed federal regulations?<br/>
           </StyledText>
           <HomeNavBar sticky={isSticky} />
           <Arrow onClick={scrollToContent} />
         </HomePageContainer>
         <HomePageContainer>
-          <Dot />
           <StyledContent>
             About <br />
             <Subheading>Your voice in federal decision making</Subheading>
@@ -135,7 +97,6 @@ const HomePage = () => {
             </BodyText>
           </StyledContent>
         </HomePageContainer>
-      </AlignmentContainer>
 
     </>
     

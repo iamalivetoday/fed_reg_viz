@@ -6,15 +6,15 @@ const NavBarContainer = styled.nav`
   display: flex;
   justify-content: space-between; /* Ensures space between the groups */
   padding: 1rem;
-  background: #13151C; /* Dark background color */
-  color: white;
+  background: white;
+  color: black;
 `;
 
 const NavLink = styled(Link)`
   padding: 10px 20px;
   margin: 0 40px; /* Spacing between links */
   text-decoration: none;
-  color: white;
+  color: black;
   border-radius: 20px;
   transition: background-color 0.3s;
 

@@ -1,6 +1,6 @@
 .App {
   text-align: center;
-  background: #13151C;
+  background: white;
 
 }
 
@@ -16,7 +16,7 @@
 }
 
 .App-header {
-  background: #13151C;
+  background: #white;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -36,4 +36,9 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+html, body {
+  height: 100vh;
+  width: 100vw;
 }

@@ -6,12 +6,10 @@ const FooterContainer = styled.footer`
   width: 100%;
   padding-bottom: 1rem;
   padding-right: 10rem;
-  color: white;
-  background: #13151C;
+  color: black;
+  background: white;
   text-align: right;
-  padding-top: 40px;
   display: right;
-  bottom: 0;
   align-items: vertical;
 `;
 
@@ -21,12 +19,12 @@ const MadeleineDiv = styled.div`
 `;
 
 const MadeleineLink = styled.a`
-  color: white;
+  color: black;
   text-decoration: none;
   
 
   &:hover {
-    color: white;
+    color: black;
     font-style: italic;
     text-decoration: none;
   }
@@ -40,7 +38,7 @@ const Footer = () => {
       <MadeleineDiv>
       "to improve our country, state, county, town, and school"
       <br/>
-      Made with  <FaHeart style={{ color: 'white' }} />   by    
+      Made with  <FaHeart style={{ color: 'black' }} />   by    
       <MadeleineLink href="https://whenwereachwe.net" target="_blank" rel="noopener noreferrer"> Madeleine</MadeleineLink>
       { }
       </MadeleineDiv>
