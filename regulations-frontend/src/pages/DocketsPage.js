@@ -13,17 +13,13 @@ const StyledTable = styled.table`
   width: 100%;
   border-collapse: collapse;
   th, td {
-    border: 1px solid white;
+    border: 1px solid;
     padding: 10px;
     text-align: left;
-  }
-  th {
-    background-color: #282C34;
   }
 `;
 
 const StyledLink = styled.a`
-  color: white;
   text-decoration: none;
   &:hover {
     font-style: italic;
@@ -31,7 +27,6 @@ const StyledLink = styled.a`
 `;
 
 const LoadingMessage = styled.div`
-  color: white;
   margin-top: 20px;
 `;
 

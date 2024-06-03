@@ -27,9 +27,8 @@ const agencies = [
 ];
 
 const AgenciesPageContainer = styled.div`
-  background-color: #13151C;
-  color: white;
   padding: 20px;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;

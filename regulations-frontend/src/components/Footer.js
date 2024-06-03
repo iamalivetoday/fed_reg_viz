@@ -4,13 +4,17 @@ import { FaHeart } from 'react-icons/fa';
 
 const FooterContainer = styled.footer`
   width: 100%;
-  padding-bottom: 1rem;
   padding-right: 10rem;
+  padding-bottom: 10px;
   color: black;
   background: white;
   text-align: right;
   display: right;
   align-items: vertical;
+  position: fixed;
+  left:0;
+  bottom:0;
+  right:0;
 `;
 
 const MadeleineDiv = styled.div`
@@ -20,8 +24,9 @@ const MadeleineDiv = styled.div`
 
 const MadeleineLink = styled.a`
   color: black;
-  text-decoration: none;
-  
+  text-decoration: none;  
+  padding-top: 15px;
+  padding-bottom: 15px;
 
   &:hover {
     color: black;
@@ -36,11 +41,11 @@ const Footer = () => {
       <div>
       </div>
       <MadeleineDiv>
-      "to improve our country, state, county, town, and school"
-      <br/>
-      Made with  <FaHeart style={{ color: 'black' }} />   by    
-      <MadeleineLink href="https://whenwereachwe.net" target="_blank" rel="noopener noreferrer"> Madeleine</MadeleineLink>
-      { }
+        <MadeleineLink href="https://youtu.be/CGHGDO_b_q0?si=UDEsnEyzxhD-fm20&t=90" target="_blank" rel="noopener noreferrer"> "to improve our country, state, county, town, and school..." </MadeleineLink>
+        <br/>
+        Made with  <FaHeart style={{ color: 'black' }} />   by    
+        <MadeleineLink href="https://whenwereachwe.net" target="_blank" rel="noopener noreferrer"> Madeleine</MadeleineLink>
+        { }
       </MadeleineDiv>
     </FooterContainer>
   );

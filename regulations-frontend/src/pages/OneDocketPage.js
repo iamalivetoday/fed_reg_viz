@@ -3,10 +3,11 @@ import axios from 'axios';
 import AllComments from '../components/AllComments';
 import DocketSummary from '../components/DocketSummary';
 import CommentDisplay from '../components/CommentDisplay'; 
-import AgencyButton from '../components/AgencyButton'; // Ensure you import AgencyButton
 import {useNavigate} from 'react-router-dom';
 
 const OneDocketPage = () => {
+  //  const { agencyAcronym } = useParams();
+
   const [comments, setComments] = useState([]);
   const [activeComment, setActiveComment] = useState(null);
   const [isCommentDisplayOpen, setIsCommentDisplayOpen] = useState(false);
@@ -53,27 +54,9 @@ const OneDocketPage = () => {
     setIsCommentDisplayOpen(false);
   };
 
-  const fetchDocketsByAgency = (agencyAcronym) => {
-    // Example function to fetch dockets by agency and set the first docket's ID
-    axios.get(`http://127.0.0.1:5000/api/dockets/agency/${agencyAcronym}`)
-      .then(response => {
-        // Assume response contains an array of dockets; set the first one as current
-        if (response.data && response.data.length > 0) {
-          setDocketId(response.data[0].id);
-          console.log(`Dockets for ${agencyAcronym}:`, response.data);
-        }
-      })
-      .catch(error => console.error('Failed to fetch dockets:', error));
-  };
-
 
   return (
     <div>
-      {/* Render Agency Buttons */}
-      <AgencyButton agencyId="EPA" onClick={fetchDocketsByAgency} />
-      <AgencyButton agencyId="FTC" onClick={fetchDocketsByAgency} />
-      <AgencyButton agencyId="CPSC" onClick={fetchDocketsByAgency} />
-      {/* Existing Components */}
       <DocketSummary docketId={docketId} />
       <AllComments comments={comments} setActiveComment={handleCommentClick} activeComment={activeComment} bgColor="lightblue" />
       {isCommentDisplayOpen && <CommentDisplay comment={activeComment} onHide={hideCommentDisplay} />}

@@ -1,100 +1,64 @@
-import React, { useEffect, useState } from 'react';
-import styled, { keyframes } from 'styled-components';
-import { BsArrowDownCircle } from 'react-icons/bs';
-import HomeNavBar from '../components/HomeNavBar';
+import React from 'react';
+import styled from 'styled-components';
 import Typewriter from 'typewriter-effect';
+import { FaArrowRightLong } from "react-icons/fa6";
+import { useNavigate } from 'react-router-dom';
 
 const HomePageContainer = styled.div`
-  background-color: white;
-
-  color: black;
   display: flex;
+  height: 100%;
+  width: 100%;
   flex-direction: column;
-  align-items: center;
+  align-items: left;
   justify-content: center;
-`;
-
-const Arrow = styled(BsArrowDownCircle)`
-  color: white;
-  font-size: 3rem;
-  cursor: pointer;
-  margin-top: 10%;
-`;
-
-const StyledText = styled.div`
-  font-size: 3em;
-  text-align: left;
+  margin-top: 2%;
+  margin-left: 5%;
 `;
 
 const StyledContent = styled.div`
-  font-size: 3em;
-  margin-left: 8%;
+  font-size: 10em;
   display: inline-block;
 `;
 
-const fadeInOut = keyframes`
-  0%, 100% { opacity: 0; }
-  25%, 50% { opacity: 1; }    // Full visibility quickly
-  75% { opacity: 0.6; }    /
-`;
 
-const Subheading = styled.i`
-  margin-top: 10px;
-  font-size: 0.4em; // Adjust based on your preference
-`;
-
-const BodyText = styled.p`
-  font-size: 0.4em; // Adjust based on your preference
+const BodyText = styled.a`
+  margin: none;
+  padding: none;
 `;
 
 const HomePage = () => {
-  const [isSticky, setIsSticky] = useState(false);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const shouldBeSticky = window.scrollY > 150; // Adjust based on your layout
-      setIsSticky(shouldBeSticky);
-    };
+  const navigate = useNavigate();
 
-    window.addEventListener('scroll', handleScroll);
-
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-
-
-  const scrollToContent = () => {
-    window.scrollTo({ top: window.innerHeight, behavior: "smooth" });
+  const handleNavigation = (path) => {
+    navigate(path);
   };
 
   return (
     <>
         <HomePageContainer>
-          <StyledText>
+          <StyledContent>
             What do <br/>
             <Typewriter
               options={{
-                strings: ["we", "the people", "Americans", "you", "working people", "our neighbors", "ordinary people", "other families"],
+                showCursor: false,
+                strings: ["we", "the people", "Americans", "you", "working people", "your friends", "our neighbors", "ordinary Americans", "other families"],
                 autoStart: true,
                 loop: true,
+                pauseFor: 7000,
+                delay: 800,
+                deleteSpeed: 100,
               }}
             />
             think about <br/>
-            our proposed federal regulations?<br/>
-          </StyledText>
-          <HomeNavBar sticky={isSticky} />
-          <Arrow onClick={scrollToContent} />
-        </HomePageContainer>
-        <HomePageContainer>
-          <StyledContent>
-            About <br />
-            <Subheading>Your voice in federal decision making</Subheading>
-            <BodyText>
-              <a href="https://www.regulations.gov">regulations.gov</a> is a federal website intended to Enable Public Access to Regulatory Materials, 
-              Increase Rulemaking participation, and improve Agencies' Efficiency & Effectiveness. 
-              This website, which is not an official website of the US government, uses the regulations.gov API 
-              to help make proposed regulatory materials easier to navigate.
-            </BodyText>
+            <BodyText
+            > our proposed federal regulations? </BodyText>
+            <FaArrowRightLong 
+              style={{ position: 'relative', left: '30px', top: '30px' }} 
+              onClick={() => handleNavigation('/agencies')} 
+              onMouseOver={({target})=>target.style.color="green"}
+              onMouseOut={({target})=>target.style.color="black"}
+            />
           </StyledContent>
         </HomePageContainer>
 
