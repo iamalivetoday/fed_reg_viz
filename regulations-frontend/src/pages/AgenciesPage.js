@@ -35,16 +35,10 @@ const AgenciesPageContainer = styled.div`
   justify-content: flex-start;
 `;
 
-const Title = styled.h1`
+const Title = styled.div`
   margin-top: 0;
   margin-bottom: 20px;
   font-size: 2.5em;
-`;
-
-const StyledAgencyButton = styled(AgencyButton)`
-  margin: 10px;
-  padding: 20px; // Increase padding for larger button
-  font-size: 1.2em; // Larger text
 `;
 
 const AgencyTable = styled.table`
@@ -73,7 +67,7 @@ const AgenciesPage = () => {
     <AgenciesPageContainer>
       <Title>Some of our beautiful federal agencies</Title>
       {agencies.map((agency) => (
-        <StyledAgencyButton 
+        <AgencyButton 
           key={agency.acronym} 
           agencyId={agency.acronym} 
           fullAgencyName={agency.fullName}

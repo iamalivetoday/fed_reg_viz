@@ -6,16 +6,14 @@ const NavBarContainer = styled.nav`
   display: flex;
   justify-content: space-between; /* Ensures space between the groups */
   padding: 1rem;
-  background: white;
-  color: black;
 `;
 
 const NavLink = styled(Link)`
-  padding: 10px 20px;
-  margin: 0 40px; /* Spacing between links */
+  padding: 0.1em 0.2em;
+  color: inherit;
+  margin: 0 0.4em; /* Spacing between links */
   text-decoration: none;
-  color: black;
-  border-radius: 20px;
+  border-radius: 0.2em;
   transition: background-color 0.3s;
 
   &:nth-child(2) {
@@ -23,7 +21,7 @@ const NavLink = styled(Link)`
   }
 
   &:hover {
-    background-color: #6259ca; /* Color for hover state */
+    background-color: inherit; /* Color for hover state */
   }
 `;
 

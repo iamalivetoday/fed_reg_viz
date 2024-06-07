@@ -9,21 +9,22 @@ const HomePageContainer = styled.div`
   height: 100%;
   width: 100%;
   flex-direction: column;
-  align-items: left;
-  justify-content: center;
+  align-items: stretch;
+  justify-content: space-evenly;
   margin-top: 2%;
   margin-left: 5%;
+  margin-bottom: 2%;
 `;
 
 const StyledContent = styled.div`
-  font-size: 10em;
-  display: inline-block;
+  font-size: 3rem;
+  flex-direction: column;
+  display: inline;
 `;
 
-
 const BodyText = styled.a`
-  margin: none;
-  padding: none;
+  flex-direction: column;
+  display: flex;
 `;
 
 const HomePage = () => {
@@ -38,7 +39,7 @@ const HomePage = () => {
     <>
         <HomePageContainer>
           <StyledContent>
-            What do <br/>
+            <BodyText>What do </BodyText>
             <Typewriter
               options={{
                 showCursor: false,
@@ -50,15 +51,18 @@ const HomePage = () => {
                 deleteSpeed: 100,
               }}
             />
-            think about <br/>
-            <BodyText
-            > our proposed federal regulations? </BodyText>
             <FaArrowRightLong 
-              style={{ position: 'relative', left: '30px', top: '30px' }} 
+              style={{ position: 'fixed', right: '1em', top: '1em' }} 
+              size={140}
               onClick={() => handleNavigation('/agencies')} 
               onMouseOver={({target})=>target.style.color="green"}
               onMouseOut={({target})=>target.style.color="black"}
             />
+            <BodyText>think about </BodyText>
+            <BodyText>our proposed </BodyText>
+            <BodyText
+            > federal regulations? </BodyText>
+
           </StyledContent>
         </HomePageContainer>
 

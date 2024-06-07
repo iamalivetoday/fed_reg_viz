@@ -14,6 +14,7 @@ const FooterContainer = styled.footer`
   position: fixed;
   left:0;
   bottom:0;
+  font-size: 0.5rem;
   right:0;
 `;
 
