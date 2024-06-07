@@ -16,8 +16,8 @@ const Button = styled.button`
 
   &:hover {
     opacity: 0.8;
-    outline: 2px solid blue;
-    box-shadow: 0 0 10px blue;
+    outline: 2px solid darkgreen;
+    box-shadow: 0 0 10px darkgreen;
   }
 
   &:focus {
