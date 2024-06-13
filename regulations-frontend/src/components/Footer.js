@@ -5,16 +5,14 @@ import { FaHeart } from 'react-icons/fa';
 const FooterContainer = styled.footer`
   width: 100%;
   padding-right: 10rem;
-  padding-bottom: 10px;
   color: black;
-  background: white;
   text-align: right;
   display: right;
   align-items: vertical;
   position: fixed;
   left:0;
+  font-size: 10px;
   bottom:0;
-  font-size: 0.5rem;
   right:0;
 `;
 
@@ -43,7 +41,6 @@ const Footer = () => {
       </div>
       <MadeleineDiv>
         <MadeleineLink href="https://youtu.be/CGHGDO_b_q0?si=UDEsnEyzxhD-fm20&t=90" target="_blank" rel="noopener noreferrer"> "to improve our country, state, county, town, and school..." </MadeleineLink>
-        <br/>
         Made with  <FaHeart style={{ color: 'black' }} />   by    
         <MadeleineLink href="https://whenwereachwe.net" target="_blank" rel="noopener noreferrer"> Madeleine</MadeleineLink>
         { }

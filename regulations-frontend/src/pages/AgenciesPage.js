@@ -48,30 +48,27 @@ const AgenciesPageContainer = styled.div`
 
 const Header = styled.div`
   width: 100%;
-  display: flex;
+  flex-direction: column;
   justify-content: space-between;
-  align-items: center;
+  align-items: left;
   margin-bottom: 20px;
 `;
 
 const Title = styled.div`
   margin-top: 0;
-  font-size: 2.5em;
+  margin-left: 25px;
+  font-size: 2em;
   text-align: left;
 `;
 
 const ToggleButton = styled.button`
   padding: 10px 20px;
-  font-size: 1em;
+  font-size: 0.5 em;
   cursor: pointer;
-  background-color: #282C34;
-  color: white;
-  border: none;
+  border: 2px solid black;
   border-radius: 5px;
 
-  &:hover {
-    background-color: #404854;
-  }
+
 `;
 
 const AgencyTable = styled.table`
@@ -115,7 +112,7 @@ const AgenciesPage = () => {
       <Header>
         <Title>Some of our beautiful federal agencies</Title>
         <ToggleButton onClick={toggleView}>
-          {view === 'buttons' ? 'Show Table' : 'Show Buttons'}
+          {view === 'toggle' ? 'table view' : 'button'}
         </ToggleButton>
       </Header>
       {view === 'buttons' ? (

@@ -1,73 +1,109 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Typewriter from 'typewriter-effect';
-import { FaArrowRightLong } from "react-icons/fa6";
+import { GoArrowRight } from 'react-icons/go';
 import { useNavigate } from 'react-router-dom';
+import bg from '../assets/bg.png';
 
 const HomePageContainer = styled.div`
   display: flex;
-  height: 100%;
+  height: 100vh; /* Make sure it covers the full height of the viewport */
   width: 100%;
-  flex-direction: column;
-  align-items: stretch;
-  justify-content: space-evenly;
-  margin-top: 2%;
-  margin-left: 5%;
-  margin-bottom: 2%;
+  position: relative;
+  background-image: url(${bg});
+  background-size: cover;
+  background-size: 100vw 100vh;
+  background-position: center;
+  /* Remove background image on small screens */
+  @media (max-width: 710px) {
+    background-image: none;
+  }
 `;
 
 const StyledContent = styled.div`
-  font-size: 3rem;
-  flex-direction: column;
-  display: inline;
+  position: absolute;
+  margin: 20px;
+  padding: 20px;
+  text-align: left;
+  color: black;
 `;
 
-const BodyText = styled.a`
-  flex-direction: column;
-  display: flex;
+const BodyText = styled.div`
+  font-size: 12vh;
+  @media (max-width: 710px) {
+    font-size: 10vh;
+  }
+`;
+
+const TypewriterWrapper = styled.div`
+  font-size: 12vh; /* Set the font size to match BodyText */
+  @media (max-width: 710px) {
+    font-size: 10vh;
+  }
+`;
+
+const ArrowContainer = styled.div`
+  position: fixed;
+  right: 0px;
+  top: -20px;
+  cursor: pointer;
+
+  @media (max-width: 710px) {
+    right: 20%;
+    top: 15%;
+    transform: translate(50%, -50%);
+  }
 `;
 
 const HomePage = () => {
-
   const navigate = useNavigate();
+  const [arrowSize, setArrowSize] = useState(window.innerWidth < 710 ? 240 : 150);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setArrowSize(window.innerWidth < 710 ? 240 : 150);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const handleNavigation = (path) => {
     navigate(path);
   };
 
   return (
-    <>
-        <HomePageContainer>
-          <StyledContent>
-            <BodyText>What do </BodyText>
-            <Typewriter
-              options={{
-                showCursor: false,
-                strings: ["we", "the people", "Americans", "you", "working people", "your friends", "our neighbors", "ordinary Americans", "other families"],
-                autoStart: true,
-                loop: true,
-                pauseFor: 7000,
-                delay: 800,
-                deleteSpeed: 100,
-              }}
-            />
-            <FaArrowRightLong 
-              style={{ position: 'fixed', right: '1em', top: '1em' }} 
-              size={140}
-              onClick={() => handleNavigation('/agencies')} 
-              onMouseOver={({target})=>target.style.color="green"}
-              onMouseOut={({target})=>target.style.color="black"}
-            />
-            <BodyText>think about </BodyText>
-            <BodyText>our proposed </BodyText>
-            <BodyText
-            > federal regulations? </BodyText>
-
-          </StyledContent>
-        </HomePageContainer>
-
-    </>
-    
+    <HomePageContainer>
+      <StyledContent>
+        <BodyText>What do </BodyText>
+        <TypewriterWrapper>
+          <Typewriter
+            options={{
+              showCursor: false,
+              strings: ["we", "the people", "Americans", "students", "our unions", "you", "families", "working people", "veterans", "your friends", "our neighbors", "ordinary Americans", "other families"],
+              autoStart: true,
+              loop: true,
+              pauseFor: 7000,
+              delay: 800,
+              deleteSpeed: 100,
+            }}
+          />
+        </TypewriterWrapper>
+        <BodyText>think about </BodyText>
+        <BodyText>our proposed </BodyText>
+        <BodyText>federal regulations?</BodyText>
+        <ArrowContainer>
+          <GoArrowRight
+            size={arrowSize}
+            onClick={() => handleNavigation('/agencies')}
+            onMouseOver={({ target }) => target.style.color = 'green'}
+            onMouseOut={({ target }) => target.style.color = 'black'}
+          />
+        </ArrowContainer>
+      </StyledContent>
+    </HomePageContainer>
   );
 };
 
