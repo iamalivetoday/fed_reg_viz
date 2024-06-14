@@ -120,7 +120,7 @@ def perform_sentiment_analysis(comments):
 def get_dockets_by_agency(agency):
     headers = {"X-Api-Key": API_KEY}
     # Updated to sort by lastModifiedDate in descending order
-    dockets_response = requests.get(f"{API_BASE_URL}dockets?sort=-lastModifiedDate&filter[agencyId]={agency}&api_key={API_KEY}", headers=headers)
+    dockets_response = requests.get(f"{API_BASE_URL}dockets?sort=-lastModifiedDate&filter[docketType]=Rulemaking&filter[agencyId]={agency}&api_key={API_KEY}", headers=headers)
     if dockets_response.status_code == 200:
         return dockets_response.json()
     else:
