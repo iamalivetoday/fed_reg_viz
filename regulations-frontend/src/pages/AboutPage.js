@@ -1,6 +1,22 @@
 import React from 'react';
 import styled from 'styled-components';
+import FAQCard from '../components/FAQCard';
 
+
+const FAQs = [
+  {
+    question: 'What is the return policy?',
+    answer: 'You can return any item within 30 days of purchase.'
+  },
+  {
+    question: 'How do I track my order?',
+    answer: 'You can track your order using the tracking number provided in the shipping confirmation email.'
+  },
+  {
+    question: 'Do you offer international shipping?',
+    answer: 'Yes, we offer international shipping to most countries.'
+  }
+];
 
 const AboutPageContainer = styled.div`
   display: flex;
@@ -28,6 +44,12 @@ const AboutBody = styled.a`
 `;
 
 
+const GridContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+  justify-items: center;
+`;
 const AboutPage = () => {
   return (
     <AboutPageContainer>
@@ -40,6 +62,11 @@ const AboutPage = () => {
         This website is not an official website of the US government, but it uses the regulations.gov API 
         to help make that website easier to navigate.
       </AboutBody>
+      <GridContainer>
+        {FAQs.map((faq, index) => (
+          <FAQCard key={index} question={faq.question} answer={faq.answer} />
+        ))}
+      </GridContainer>
     </AboutPageContainer>
   );
 };
