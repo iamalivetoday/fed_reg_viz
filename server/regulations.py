@@ -7,8 +7,7 @@ from flask_cors import CORS, cross_origin
 
 # API Key and Base URL setup
 API_BASE_URL = "https://api.regulations.gov/v4/"
-#API_KEY = "DEMO_KEY"  # Replace with your actual API key
-API_KEY = "YauEoriccK04skfmgd1wTAuHeXQ4dy48dzck8Wi4"
+API_KEY="YauEoriccK04skfmgd1wTAuHeXQ4dy48dzck8Wi4"
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True, logging=True)
