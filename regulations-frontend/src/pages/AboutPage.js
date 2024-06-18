@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import FAQCard from '../components/FAQCard';
 
-
 const FAQs = [
   {
     question: 'What is the return policy?',
@@ -20,14 +19,11 @@ const FAQs = [
 
 const AboutPageContainer = styled.div`
   display: flex;
-  height: 100%;
-  width: 100%;
   flex-direction: column;
-  align-items: left;
-  justify-content: center;
+  min-height: 100vh; /* ensure it takes the full height */
   margin-top: 2%;
   margin-left: 5%;
-  margin-right: 5%
+  margin-right: 5%;
   margin-bottom: 2%;
 `;
 
@@ -43,12 +39,13 @@ const AboutBody = styled.a`
 
 `;
 
-
 const GridContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 20px;
+  gap: 10px;
   justify-items: center;
+  padding-left: 10%;
+  padding-right: 10%;
 `;
 const AboutPage = () => {
   return (

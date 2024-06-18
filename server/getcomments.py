@@ -22,7 +22,7 @@ def fetch_comment(comment_id):
 
 # Fetching comment ids and then getting comment text
 for i in range(1, 11):  # 10 pages * 100 comments per page = 1000 comments
-    url = f'https://api.regulations.gov/v4/comments?sort=-postedDate&page[size]=100&page[number]={i}&api_key={api_key}'
+    url = f'https://api.regulations.gov/v4/comments?filter[postedDate]=2020-09-01&page[size]=100&page[number]={i}&api_key={api_key}'
     response = requests.get(url)
     if response.status_code == 200:
         data = response.json()

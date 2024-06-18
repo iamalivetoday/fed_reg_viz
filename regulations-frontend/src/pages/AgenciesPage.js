@@ -47,32 +47,44 @@ const AgenciesPageContainer = styled.div`
 `;
 
 const Header = styled.div`
-  width: 100%;
-  flex-direction: column;
+  width: 85%;
+  display: flex;
+  flex-direction: row;
   justify-content: space-between;
-  align-items: left;
+  align-items: center; /* Adjusted to center items vertically */
   margin-bottom: 20px;
 `;
 
 const Title = styled.div`
   margin-top: 0;
-  margin-left: 25px;
   font-size: 2em;
   text-align: left;
 `;
 
+
 const ToggleButton = styled.button`
-  padding: 10px 20px;
-  font-size: 0.5 em;
+  padding: 10px;
+  font-size: 1em;
   cursor: pointer;
-  border: 2px solid black;
+  border: 1px solid black;
   border-radius: 5px;
+  max-width: 200px; /* adjust this as needed */
+  text-align: center;
 
+  &:hover {
+    font-style: italic;
+  }
 
+  /* reduce font size if text overflows */
+  @media (min-width: 0px) {
+    & {
+      font-size: calc(1em - (0.1em * (100vw / 200px)));
+    }
+  }
 `;
 
 const AgencyTable = styled.table`
-  width: 80%;
+  width: 85%;
   margin-top: 20px;
   border-collapse: collapse;
   border: 1px solid black; /* Change the border color to black */
@@ -82,8 +94,7 @@ const AgencyTable = styled.table`
     text-align: left;
   }
   th {
-    background-color: #282C34;
-    color: white;
+    color: black;
   }
 `;
 
@@ -92,7 +103,8 @@ const AgencyButtonsContainer = styled.div`
   flex-wrap: wrap;
   gap: 10px; /* Adjust the gap as needed */
   justify-content: center;
-  width: 100%; /* Adjust the width as needed */
+  width: 100%; /* Set width to 80% to match the table and header */
+  margin-top: 20px;
 `;
 
 const AgenciesPage = () => {
@@ -112,7 +124,7 @@ const AgenciesPage = () => {
       <Header>
         <Title>Some of our beautiful federal agencies</Title>
         <ToggleButton onClick={toggleView}>
-          {view === 'toggle' ? 'table view' : 'button'}
+          {view === 'buttons' ? 'Show Table' : 'Show Buttons'}
         </ToggleButton>
       </Header>
       {view === 'buttons' ? (

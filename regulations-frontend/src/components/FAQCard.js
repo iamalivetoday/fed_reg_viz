@@ -11,7 +11,7 @@ const Card = styled.div`
   height: 133px; // 2/3 of the previous height
   position: relative;
   transform-style: preserve-3d;
-  transition: transform 0.6s;
+  transition: transform 1s;
   transform: ${props => (props.isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)')};
 `;
 
@@ -26,7 +26,6 @@ const CardFace = styled.div`
   font-size: 16px;
   border: 1px solid #ccc;
   border-radius: 10px;
-  padding: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   top: 0;
   left: 0;
