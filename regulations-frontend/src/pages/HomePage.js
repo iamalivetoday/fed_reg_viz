@@ -50,7 +50,7 @@ const ArrowContainer = styled.div`
 
   @media (max-width: 710px) {
     right: 20%;
-    top: 15%;
+    top: 20%;
     transform: translate(50%, -50%);
   }
 `;
@@ -82,10 +82,10 @@ const HomePage = () => {
           <Typewriter
             options={{
               showCursor: false,
-              strings: ["we", "the people", "Americans", "students", "our unions", "you", "families", "working people", "veterans", "your friends", "our neighbors", "ordinary Americans", "other families"],
+              strings: ["we", "ordinary people", "Americans", "students", "our unions", "you", "families", "working people", "veterans", "your friends", "our neighbors", "ordinary Americans", "other families"],
               autoStart: true,
               loop: true,
-              pauseFor: 7000,
+              pauseFor: 4000,
               delay: 800,
               deleteSpeed: 100,
             }}

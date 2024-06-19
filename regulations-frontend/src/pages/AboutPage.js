@@ -1,21 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import FAQCard from '../components/FAQCard';
-
-const FAQs = [
-  {
-    question: 'What is the return policy?',
-    answer: 'You can return any item within 30 days of purchase.'
-  },
-  {
-    question: 'How do I track my order?',
-    answer: 'You can track your order using the tracking number provided in the shipping confirmation email.'
-  },
-  {
-    question: 'Do you offer international shipping?',
-    answer: 'Yes, we offer international shipping to most countries.'
-  }
-];
 
 const AboutPageContainer = styled.div`
   display: flex;
@@ -32,61 +16,112 @@ const AboutTitle = styled.div`
   display: inline-block;
 `;
 
-const AboutBody = styled.a`
+const ContentContainer = styled.div`
+  display: flex;
+`;
+
+const AboutBody = styled.div`
   font-size: 1em;
   margin-right: 5%;
   padding-right: 5%;
-
+  flex: 1;
 `;
 
-const GridContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 10px;
-  justify-items: center;
-  padding-left: 10%;
-  padding-right: 10%;
+const TabContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-left: 20px;
+  align-self: flex-start;
 `;
+
+const TabButton = styled.button`
+  padding: 10px 20px;
+  cursor: pointer;
+  background-color: ${(props) => (props.active ? '#007BFF' : '#f1f1f1')};
+  color: ${(props) => (props.active ? '#fff' : '#000')};
+  border: none;
+  border-bottom: ${(props) => (props.active ? '2px solid #007BFF' : '2px solid #ccc')};
+  outline: none;
+  font-size: 1em;
+  margin-bottom: 5px;
+
+  &:hover {
+    background-color: #ddd;
+  }
+`;
+
+const HighlightText = styled.span`
+  position: relative;
+  cursor: pointer;
+  &:hover::after {
+    content: "${(props) => props.tooltip}";
+    position: absolute;
+    left: 100%;
+    top: 0;
+    margin-left: 10px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    white-space: nowrap;
+    z-index: 10;
+  }
+  &:hover::before {
+    content: '';
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-left: 5px;
+    width: 10px;
+    height: 1px;
+    background-color: #ccc;
+  }
+`;
+
 const AboutPage = () => {
+  const [activeTab, setActiveTab] = useState('simple');
+
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+  };
+
   return (
     <AboutPageContainer>
-      <AboutTitle>
-        About
-      </AboutTitle>
-      <AboutBody>
-        <a href="https://www.regulations.gov">regulations.gov</a> is a federal website intended to make it easier for the public to participate and impact Federal rules and regulations.
-        <br/> <br/>
-        This website is not an official website of the US government, but it uses the regulations.gov API 
-        to help make that website easier to navigate.
-      </AboutBody>
-      <GridContainer>
-        {FAQs.map((faq, index) => (
-          <FAQCard key={index} question={faq.question} answer={faq.answer} />
-        ))}
-      </GridContainer>
+      <AboutTitle>About</AboutTitle>
+      <ContentContainer>
+        <AboutBody>
+          {activeTab === 'simple' && (
+            <p>
+              <HighlightText tooltip="Laws created by agencies without Congress approval.">Regulations</HighlightText> are like laws but don't need to be passed by Congress. They're issued by agencies. Agencies propose regulations and ask the public for their opinions. Based on feedback, they decide whether to proceed, modify, or withdraw the regulation.
+            </p>
+          )}
+          {activeTab === 'advanced' && (
+            <div>
+              <p>
+                <a href="https://www.regulations.gov">regulations.gov</a> is a federal website intended to make it easier for the public to participate and impact Federal rules and regulations.
+                <br /><br />
+                This website is not an official website of the US government, but it uses the regulations.gov API 
+                to help make that website easier to navigate.
+              </p>
+              <p>
+                <HighlightText tooltip="Official rules that have the force of law but aren't created by Congress.">Regulations</HighlightText> are official rules that have the force of law but are not created by Congress. They are proposed by government agencies, which solicit public feedback before deciding on the final form of the regulation. This process is known as rulemaking.
+                <br /><br />
+                Examples of proposed regulations include AI policies, noncompete clauses, and various health and safety measures. It's important for the public to participate in this process to ensure that regulations are fair and effective.
+              </p>
+            </div>
+          )}
+        </AboutBody>
+        <TabContainer>
+          <TabButton active={activeTab === 'simple'} onClick={() => handleTabClick('simple')}>
+            Simple Explanation
+          </TabButton>
+          <TabButton active={activeTab === 'advanced'} onClick={() => handleTabClick('advanced')}>
+            Advanced Explanation
+          </TabButton>
+        </TabContainer>
+      </ContentContainer>
     </AboutPageContainer>
   );
 };
 
 export default AboutPage;
-
-/*
-FAQ
-what are regulations? 
-Regulations are like laws, but they don't need to be passed by Congress.
-Instead, they're issued by agencies.
-Agencies submit their proposed regulations to the public, and people leave comments on whether they think the proposed regulation is a good or bad idea.
-Depending on what the people think, agencies will either proceed with the rulemaking process, issue a new or modified proposal, or withdraw the proposal.
-
-Some examples of proposed regulations: 
-You can see why it's important for people to participate in the rulemaking process by 
-AI, noncompetes, 
-
-How to use this websites
-You can use this website to look through our proposed federal regulations and see what people think about them, and post comments.
-*/
-
-
-/*
-“Federal agency” means any department, independent establishment, Government corporation, or other agency of the executive branch of the Federal Government, including the United States Postal Service, but shall not include the American National Red Cross.
-*/

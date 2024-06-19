@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import AgencyButton from '../components/AgencyButton'; // Adjust the path as needed
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -7,6 +6,7 @@ const agencies = [
   { acronym: "FTC", fullName: "Federal Trade Commission", currentChair: "Lina Khan", description: "Protects consumers and promotes competition" },
   { acronym: "NRC", fullName: "Nuclear Regulatory Commission", currentChair: "Christopher T. Hanson", description: "Regulates nuclear power plants and materials" },
   { acronym: "FDA", fullName: "Food and Drug Administration", currentChair: "Robert M. Califf", description: "Ensures safety of food and drugs" },
+  { acronym: "FCC", fullName: "Federal Communications Commission", currentChair: "Jessica Rosenworcel", description: "Regulates  radio, TV, wire, satellite, and cable communications" },
   { acronym: "FAA", fullName: "Federal Aviation Administration", currentChair: "Steve Dickson", description: "Regulates civil aviation" },
   { acronym: "SSA", fullName: "Social Security Administration", currentChair: "Kilolo Kijakazi", description: "Manages social security" },
   { acronym: "FDIC", fullName: "Federal Deposit Insurance Corporation", currentChair: "Martin J. Gruenberg", description: "Insures deposits in banks" },
@@ -61,28 +61,6 @@ const Title = styled.div`
   text-align: left;
 `;
 
-
-const ToggleButton = styled.button`
-  padding: 10px;
-  font-size: 1em;
-  cursor: pointer;
-  border: 1px solid black;
-  border-radius: 5px;
-  max-width: 200px; /* adjust this as needed */
-  text-align: center;
-
-  &:hover {
-    font-style: italic;
-  }
-
-  /* reduce font size if text overflows */
-  @media (min-width: 0px) {
-    & {
-      font-size: calc(1em - (0.1em * (100vw / 200px)));
-    }
-  }
-`;
-
 const AgencyTable = styled.table`
   width: 85%;
   margin-top: 20px;
@@ -98,68 +76,38 @@ const AgencyTable = styled.table`
   }
 `;
 
-const AgencyButtonsContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px; /* Adjust the gap as needed */
-  justify-content: center;
-  width: 100%; /* Set width to 80% to match the table and header */
-  margin-top: 20px;
-`;
-
 const AgenciesPage = () => {
   const navigate = useNavigate();
-  const [view, setView] = useState('buttons'); // Default view is 'buttons'
 
   const handleAgencyClick = (agencyAcronym) => {
     navigate(`/dockets/${agencyAcronym}`);
-  };
-
-  const toggleView = () => {
-    setView(view === 'buttons' ? 'table' : 'buttons');
   };
 
   return (
     <AgenciesPageContainer>
       <Header>
         <Title>Some of our beautiful federal agencies</Title>
-        <ToggleButton onClick={toggleView}>
-          {view === 'buttons' ? 'Show Table' : 'Show Buttons'}
-        </ToggleButton>
       </Header>
-      {view === 'buttons' ? (
-        <AgencyButtonsContainer>
+      <AgencyTable>
+        <thead>
+          <tr>
+            <th>Acronym</th>
+            <th>Name</th>
+            <th>Current Acting Chair</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
           {agencies.map((agency) => (
-            <AgencyButton 
-              key={agency.acronym} 
-              agencyId={agency.acronym} 
-              fullAgencyName={agency.fullName}
-              onClick={() => handleAgencyClick(agency.acronym)}
-            />
-          ))}
-        </AgencyButtonsContainer>
-      ) : (
-        <AgencyTable>
-          <thead>
-            <tr>
-              <th>Acronym</th>
-              <th>Name</th>
-              <th>Current Acting Chair</th>
-              <th>Description</th>
+            <tr key={agency.acronym} onClick={() => handleAgencyClick(agency.acronym)}>
+              <td>{agency.acronym}</td>
+              <td>{agency.fullName}</td>
+              <td>{agency.currentChair}</td>
+              <td>{agency.description}</td>
             </tr>
-          </thead>
-          <tbody>
-            {agencies.map((agency) => (
-              <tr key={agency.acronym}>
-                <td>{agency.acronym}</td>
-                <td>{agency.fullName}</td>
-                <td>{agency.currentChair}</td>
-                <td>{agency.description}</td>
-              </tr>
-            ))}
-          </tbody>
-        </AgencyTable>
-      )}
+          ))}
+        </tbody>
+      </AgencyTable>
     </AgenciesPageContainer>
   );
 };
