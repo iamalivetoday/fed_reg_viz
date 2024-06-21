@@ -15,7 +15,6 @@ def fetch_comment(comment_id):
             "text": data['data']['attributes']['comment'],
             "label": "",
             "docketId": data['data']['attributes']['docketId'],
-            "documentType": data['data']['attributes']['documentType'],
             "docAbstract": data['data']['attributes'].get('docAbstract', 'Abstract not found.')
         }
     else:
@@ -34,8 +33,8 @@ def fetch_docket_abstract(docket_id):
     return "Abstract not found."
 
 # Fetching comment ids and then getting comment text
-for i in range(1, 4):  # 10 pages * 100 comments per page = 1000 comments
-    url = f'https://api.regulations.gov/v4/comments?filter[postedDate]=2022-09-01&page[size]=100&page[number]={i}&api_key={api_key}'
+for i in range(1, 5):  # 10 pages * 100 comments per page = 1000 comments
+    url = f'https://api.regulations.gov/v4/comments?filter[postedDate]=2018-09-01&page[size]=100&page[number]={i}&api_key={api_key}'
     response = requests.get(url)
     if response.status_code == 200:
         data = response.json()
@@ -52,7 +51,7 @@ for i in range(1, 4):  # 10 pages * 100 comments per page = 1000 comments
         print(f"Request for page {i} failed. Status code: {response.status_code}")
         print(response.json())  # Print response to understand why it failed
 
-with open('comments2.json', 'w') as f:
+with open('comments5.json', 'w') as f:
     json.dump(comments, f, indent=2)
 
 print('Done! Total comments fetched:', len(comments))
