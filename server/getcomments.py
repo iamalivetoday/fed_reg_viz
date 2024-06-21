@@ -1,6 +1,5 @@
 import requests
 import json
-import os
 import time
 
 api_key = 'YauEoriccK04skfmgd1wTAuHeXQ4dy48dzck8Wi4'
@@ -14,7 +13,9 @@ def fetch_comment(comment_id):
         data = response.json()
         return {
             "text": data['data']['attributes']['comment'],
-            "label": ""
+            "label": "",
+            "docketId": data['data']['attributes']['docketId'],
+            "docAbstract": data['data']['attributes']['docAbstract']
         }
     else:
         print(f"Couldn't get comment for ID {comment_id}. Status code: {response.status_code}")
@@ -37,7 +38,7 @@ for i in range(1, 11):  # 10 pages * 100 comments per page = 1000 comments
         print(f"Request for page {i} failed. Status code: {response.status_code}")
         print(response.json())  # Print response to understand why it failed
 
-with open('commentsdata.json', 'w') as f:
+with open('comments.json', 'w') as f:
     json.dump(comments, f, indent=2)
 
-print('Done!')
+print('Done! Total comments fetched:', len(comments))
