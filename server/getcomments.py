@@ -109,10 +109,8 @@ def check_file_size(file_index):
         return True
     return False
 
-if not os.path.exists('comments'):
-    os.makedirs('comments')
-
 # Fetching comment ids and then getting comment text
+comment_counter = 0
 while current_date > start_date:
     next_date = current_date - datetime.timedelta(days=30)
     for i in range(1, 5):  # Adjust the range as needed
@@ -128,6 +126,13 @@ while current_date > start_date:
                     docket_abstract = fetch_docket_abstract(comment['docketId'])
                     comment['docAbstract'] = docket_abstract
                     comments.append(comment)
+                    comment_counter += 1
+                    if comment_counter % 100 == 0:
+                        print(f"Comment #{comment_counter}: {comment}")
+                    if comment_counter % 200 == 0:
+                        save_comments_to_file(comments, file_index)
+                        file_index += 1
+                        comments = []
                     time.sleep(0.1)  # Be polite and avoid too many requests per second
 
                 if check_file_size(file_index):
