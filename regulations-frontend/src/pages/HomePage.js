@@ -3,14 +3,12 @@ import styled from 'styled-components';
 import Typewriter from 'typewriter-effect';
 import { GoArrowRight } from 'react-icons/go';
 import { useNavigate } from 'react-router-dom';
-import bg from '../assets/bg.png';
 
 const HomePageContainer = styled.div`
   display: flex;
   height: 100vh; /* Make sure it covers the full height of the viewport */
   width: 100%;
   position: relative;
-  background-image: url(${bg});
   background-size: cover;
   background-size: 100vw 100vh;
   background-position: center;
