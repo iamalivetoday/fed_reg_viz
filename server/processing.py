@@ -90,6 +90,11 @@ if dataframes:
     all_data['combined_text'] = all_data['cleaned_commenttext'] + " " + all_data['cleaned_docAbstract']
 
     # Vectorize the text data using tf-idf
+
+    #tf = frequency of word in a doc / total number of words in that doc
+    #df = documents containing word / total number of documents
+    #idf = log(total number of documents / documents containing word w)
+     
     vectorizer = TfidfVectorizer(max_features=5000)  # Limit to 5000 features for efficiency
     X = vectorizer.fit_transform(all_data['combined_text'])
 
@@ -108,9 +113,21 @@ if dataframes:
 
     # Print feature importances (optional)
     feature_names = np.array(vectorizer.get_feature_names_out())
+    # retrieves the names of the features (words) from the TF-IDF vectorizer
     sorted_coef_index = classifier.coef_[0].argsort()
     print('Top positive words:\n', feature_names[sorted_coef_index[:-11:-1]])
+    #selects the top 10 indices for positive coefficients
+    #from the end of the array
     print('Top negative words:\n', feature_names[sorted_coef_index[:10]])
+    #selects the top 10 indices for negative coefficients
+    #from the start of the array
+
+    #precision = total positive / (total positive + false positive)
+    #recall = total positive / (total positive + false negative)
+
+    #f1 score = 2 / ((1/precision) + (1/recall))
+    #calculated as the harmonic mean of the precision and recall scores
+    #0- 100%
 
 else:
     print("No valid JSON files found.")

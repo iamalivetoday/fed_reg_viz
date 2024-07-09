@@ -122,7 +122,7 @@ def fetch_comments(docket_id, max_comments):
     return comments_fetched
 
 # Fetch comments
-docket_id = 'FTC-2023-0007'
+docket_id = 'FTC-2024-0018'
 comments = fetch_comments(docket_id, max_comments)
 
 # Save comments to file
@@ -131,6 +131,6 @@ def save_comments_to_file(comments, file_name):
     with open(file_name, 'w') as f:
         json.dump(comments, f, indent=2)
 
-save_comments_to_file(comments, 'comments5.json')
+save_comments_to_file(comments, 'comments45.json')
 
 print('Done! Total comments fetched:', len(comments))
