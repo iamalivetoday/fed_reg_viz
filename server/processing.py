@@ -131,3 +131,7 @@ if dataframes:
 
 else:
     print("No valid JSON files found.")
+
+# Save the vectorizer and classifier
+joblib.dump(vectorizer, 'tfidf_vectorizer.pkl')
+joblib.dump(best_classifier, 'logistic_regression_model.pkl')
