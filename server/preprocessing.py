@@ -3,6 +3,11 @@ import pandas as pd
 import os
 import json
 from tqdm import tqdm
+from sklearn.model_selection import train_test_split
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import classification_report
+import numpy as np
 
 # Define the path to the directory
 directory = './comments'
@@ -61,14 +66,51 @@ if dataframes:
     all_data['tokenized_commenttext'] = all_data['cleaned_commenttext'].progress_apply(simple_tokenize_text)
     all_data['tokenized_docAbstract'] = all_data['cleaned_docAbstract'].progress_apply(simple_tokenize_text)
 
-    # Print the number of rows and columns
-    print(f"Number of rows: {all_data.shape[0]}")
-    print(f"Number of columns: {all_data.shape[1]}")
+    # Map labels to binary categories (e.g., in favor vs opposed) and filter out neutral labels
+    label_mapping = {
+        'verypos': 'in favor',
+        'pos': 'in favor',
+        'neut': 'neutral',
+        'neg': 'opposed',
+        'veryneg': 'opposed'
+    }
+    all_data['binary_label'] = all_data['label'].map(label_mapping)
+    all_data = all_data[all_data['binary_label'] != 'neutral']
 
-    # Display the first few rows of the dataframe
-    print(all_data.head())
 
-    # Display basic information about the dataframe
-    print(all_data.info())
+    # Check for any labels that were not mapped
+    unmapped_labels = all_data[all_data['binary_label'].isna()]['label'].unique()
+    if len(unmapped_labels) > 0:
+        print(f"Unmapped labels found: {unmapped_labels}")
+
+    # Remove rows with NaN values in the binary_label column
+    all_data = all_data.dropna(subset=['binary_label'])
+
+    # Concatenate cleaned_commenttext and cleaned_docAbstract for vectorization
+    all_data['combined_text'] = all_data['cleaned_commenttext'] + " " + all_data['cleaned_docAbstract']
+
+    # Vectorize the text data using tf-idf
+    vectorizer = TfidfVectorizer(max_features=5000)  # Limit to 5000 features for efficiency
+    X = vectorizer.fit_transform(all_data['combined_text'])
+
+    # Split the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, all_data['binary_label'], test_size=0.2, random_state=42)
+
+    # Build and train a logistic regression classifier
+    classifier = LogisticRegression()
+    classifier.fit(X_train, y_train)
+
+    # Make predictions on the testing set
+    y_pred = classifier.predict(X_test)
+
+    # Evaluate the model
+    print(classification_report(y_test, y_pred))
+
+    # Print feature importances (optional)
+    feature_names = np.array(vectorizer.get_feature_names_out())
+    sorted_coef_index = classifier.coef_[0].argsort()
+    print('Top positive words:\n', feature_names[sorted_coef_index[:-11:-1]])
+    print('Top negative words:\n', feature_names[sorted_coef_index[:10]])
+
 else:
     print("No valid JSON files found.")
