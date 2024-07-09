@@ -19,12 +19,15 @@ for filename in tqdm(os.listdir(directory), desc="Reading JSON files"):
                 data = json.load(file)
                 if data:  # Check if the file is not empty
                     df = pd.DataFrame(data)
-                    # Filter out rows without the required columns
-                    if 'commenttext' in df.columns and 'docAbstract' in df.columns:
-                        df = df[['commenttext', 'docAbstract', 'label']].dropna(subset=['commenttext', 'docAbstract'])
-                        dataframes.append(df)
+                    print(f"Loaded file {filename} with columns: {df.columns}")
+                    # Ensure required columns are present
+                    if 'text' in df.columns:
+                        df['docAbstract'] = df['docAbstract'].fillna("")
+                        dataframes.append(df[['text', 'docAbstract', 'label']])
+                        print(f"Added data from file {filename}")
                     else:
-                        print(f"File {filename} missing required columns")
+                        print(f"File {filename} missing required columns. First few rows:")
+                        print(df.head())
                 else:
                     print(f"Skipping empty file {filename}")
         except json.JSONDecodeError as e:
@@ -34,6 +37,8 @@ for filename in tqdm(os.listdir(directory), desc="Reading JSON files"):
 
 # Define a new cleaning function without NLTK dependencies
 def simple_clean_text(text):
+    if not isinstance(text, str):
+        text = str(text)
     text = re.sub(r'[^\w\s]', '', text)  # Remove punctuation
     text = re.sub(r'\d+', '', text)  # Remove numbers
     text = text.lower()  # Convert to lowercase
@@ -50,14 +55,11 @@ if dataframes:
     # Apply preprocessing steps with progress bar
     tqdm.pandas(desc="Cleaning and Tokenizing")
 
-    all_data['cleaned_commenttext'] = all_data['commenttext'].progress_apply(simple_clean_text)
+    all_data['cleaned_commenttext'] = all_data['text'].progress_apply(simple_clean_text)
     all_data['cleaned_docAbstract'] = all_data['docAbstract'].progress_apply(simple_clean_text)
 
     all_data['tokenized_commenttext'] = all_data['cleaned_commenttext'].progress_apply(simple_tokenize_text)
     all_data['tokenized_docAbstract'] = all_data['cleaned_docAbstract'].progress_apply(simple_tokenize_text)
-
-    # Display the preprocessed data
-    import ace_tools as tools; tools.display_dataframe_to_user(name="Preprocessed All Comments", dataframe=all_data)
 
     # Print the number of rows and columns
     print(f"Number of rows: {all_data.shape[0]}")
@@ -65,5 +67,8 @@ if dataframes:
 
     # Display the first few rows of the dataframe
     print(all_data.head())
+
+    # Display basic information about the dataframe
+    print(all_data.info())
 else:
     print("No valid JSON files found.")
