@@ -8,6 +8,8 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report
 import numpy as np
+import joblib
+
 
 # Define the path to the directory
 directory = './comments'
@@ -129,9 +131,10 @@ if dataframes:
     #calculated as the harmonic mean of the precision and recall scores
     #0- 100%
 
+    # Save the vectorizer and classifier
+    joblib.dump(vectorizer, 'tfidf_vectorizer.pkl')
+    joblib.dump(classifier, 'logistic_regression_model.pkl')
+
 else:
     print("No valid JSON files found.")
 
-# Save the vectorizer and classifier
-joblib.dump(vectorizer, 'tfidf_vectorizer.pkl')
-joblib.dump(best_classifier, 'logistic_regression_model.pkl')

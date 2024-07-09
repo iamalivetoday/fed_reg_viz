@@ -4,57 +4,63 @@ import json
 import os
 import joblib
 
-# Save the vectorizer and classifier
-joblib.dump(vectorizer, 'tfidf_vectorizer.pkl')
-joblib.dump(best_classifier, 'logistic_regression_model.pkl')
+# Load the vectorizer and classifier
+vectorizer_path = 'tfidf_vectorizer.pkl'
+classifier_path = 'logistic_regression_model.pkl'
 
-# Define the path to the directory
-directory = './comments'
+if not os.path.exists(vectorizer_path) or not os.path.exists(classifier_path):
+    print("Model files not found. Ensure you have trained and saved the model.")
+else:
+    vectorizer = joblib.load(vectorizer_path)
+    classifier = joblib.load(classifier_path)
 
-# Define the path to the new data file
-new_data_file = 'comments45.json'
-new_data_path = os.path.join(directory, new_data_file)
+    # Define the path to the directory
+    directory = './comments'
 
-# Load new data
-with open(new_data_path, 'r') as file:
-    new_data = json.load(file)
+    # Define the path to the new data file
+    new_data_file = 'comments45.json'
+    new_data_path = os.path.join(directory, new_data_file)
 
-new_df = pd.DataFrame(new_data)
+    # Load new data
+    with open(new_data_path, 'r') as file:
+        new_data = json.load(file)
 
-# Preprocess the new data
-def simple_clean_text(text):
-    if not isinstance(text, str):
-        text = str(text)
-    text = re.sub(r'[^\w\s]', '', text)  # Remove punctuation
-    text = re.sub(r'\d+', '', text)  # Remove numbers
-    text = text.lower()  # Convert to lowercase
-    return text
+    new_df = pd.DataFrame(new_data)
 
-new_df['docAbstract'] = new_df['docAbstract'].fillna("")
-new_df['cleaned_commenttext'] = new_df['text'].apply(simple_clean_text)
-new_df['cleaned_docAbstract'] = new_df['docAbstract'].apply(simple_clean_text)
+    # Preprocess the new data
+    def simple_clean_text(text):
+        if not isinstance(text, str):
+            text = str(text)
+        text = re.sub(r'[^\w\s]', '', text)  # Remove punctuation
+        text = re.sub(r'\d+', '', text)  # Remove numbers
+        text = text.lower()  # Convert to lowercase
+        return text
 
-# Combine the cleaned text for vectorization
-new_df['combined_text'] = new_df['cleaned_commenttext'] + " " + new_df['cleaned_docAbstract']
+    new_df['docAbstract'] = new_df['docAbstract'].fillna("")
+    new_df['cleaned_commenttext'] = new_df['text'].apply(simple_clean_text)
+    new_df['cleaned_docAbstract'] = new_df['docAbstract'].apply(simple_clean_text)
 
-# Transform the new data using the fitted TF-IDF vectorizer
-X_new = vectorizer.transform(new_df['combined_text'])
+    # Combine the cleaned text for vectorization
+    new_df['combined_text'] = new_df['cleaned_commenttext'] + " " + new_df['cleaned_docAbstract']
 
-# Make predictions on the new data
-new_predictions = best_classifier.predict(X_new)
+    # Transform the new data using the fitted TF-IDF vectorizer
+    X_new = vectorizer.transform(new_df['combined_text'])
 
-# Add predictions to the dataframe
-new_df['predicted_label'] = new_predictions
+    # Make predictions on the new data
+    new_predictions = classifier.predict(X_new)
 
-# If you want to map back to the original labels (optional)
-reverse_label_mapping = {
-    'in favor': 'pos',
-    'opposed': 'neg'
-}
-new_df['predicted_label'] = new_df['predicted_label'].map(reverse_label_mapping)
+    # Add predictions to the dataframe
+    new_df['label'] = new_predictions
 
-# Display the new data with predictions
-print(new_df[['text', 'docAbstract', 'predicted_label']])
+    # If you want to map back to the original labels (optional)
+    reverse_label_mapping = {
+        'in favor': 'pos',
+        'opposed': 'neg'
+    }
+    new_df['label'] = new_df['label'].map(reverse_label_mapping)
 
-# Save the results to a new JSON file (optional)
-new_df.to_json('labeled_regulations45.json', orient='records', lines=True)
+    # Display the new data with predictions
+    print(new_df[['text', 'docAbstract', 'label']])
+
+    # Save the results to a new JSON file (optional)
+    new_df.to_json('comments45.json', orient='records', lines=True)
