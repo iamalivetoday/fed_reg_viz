@@ -1,106 +1,188 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Typewriter from 'typewriter-effect';
-import { GoArrowRight } from 'react-icons/go';
 import { useNavigate } from 'react-router-dom';
+import { GoArrowRight } from 'react-icons/go';
 
 const HomePageContainer = styled.div`
-  display: flex;
-  height: 100vh; /* Make sure it covers the full height of the viewport */
+  display: grid;
+  height: 95vh;
   width: 100%;
   position: relative;
-  background-size: cover;
-  background-size: 100vw 100vh;
-  background-position: center;
-  /* Remove background image on small screens */
-  @media (max-width: 710px) {
-    background-image: none;
-  }
 `;
 
 const StyledContent = styled.div`
   position: absolute;
-  margin: 20px;
-  padding: 20px;
-  text-align: left;
+  top: 0%;
+  left: 5%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: justify;
   color: black;
 `;
 
-const BodyText = styled.div`
-  font-size: 12vh;
-  @media (max-width: 710px) {
-    font-size: 10vh;
+const HoverableText = styled.div`
+  font-size: 10vh;
+  cursor: pointer;
+  position: relative;
+  display: inline-block;
+  margin: 20px 0;
+
+  &:hover .text-content {
+    visibility: hidden;
+  }
+
+  &:hover .arrow-icon {
+    visibility: visible;
   }
 `;
 
 const TypewriterWrapper = styled.div`
-  font-size: 12vh; /* Set the font size to match BodyText */
-  @media (max-width: 710px) {
-    font-size: 10vh;
-  }
+  display: inline;
 `;
 
-const ArrowContainer = styled.div`
-  position: fixed;
-  right: 0px;
-  top: -20px;
-  cursor: pointer;
+const ArrowIcon = styled(GoArrowRight)`
+  position: absolute;
+  font-size: inherit;
+  color: green;
+  visibility: hidden;
+`;
 
-  @media (max-width: 710px) {
-    right: 20%;
-    top: 20%;
-    transform: translate(50%, -50%);
-  }
+const MiddleText = styled.div`
+  position: absolute;
+  top: 50%;
+  right: 10%;
+  transform: translateY(-50%);
+  text-align: right;
+`;
+
+const LowerLeftText = styled.div`
+  position: absolute;
+  top: 60%;
+  left: 5%;
+`;
+
+const LowerRightText = styled.div`
+  position: absolute;
+  top: 80%;
+  right: 3%;
+  text-align: right;
 `;
 
 const HomePage = () => {
   const navigate = useNavigate();
-  const [arrowSize, setArrowSize] = useState(window.innerWidth < 710 ? 240 : 150);
+  const [hoveredText, setHoveredText] = useState(null);
+  const [hoveredPosition, setHoveredPosition] = useState({ x: 0, y: 0 });
 
-  useEffect(() => {
-    const handleResize = () => {
-      setArrowSize(window.innerWidth < 710 ? 240 : 150);
-    };
+  const handleMouseEnter = (e, text) => {
+    setHoveredText(text);
+    setHoveredPosition({ x: 0, y: 0});
+  };
 
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
+  const handleMouseLeave = () => {
+    setHoveredText(null);
+  };
 
   const handleNavigation = (path) => {
     navigate(path);
   };
 
+  const typewriterStrings = [
+    "we", "the people", "ordinary people", "strangers", "Americans", "students",
+    "our unions", "you", "families", "working people", "veterans", "your friends",
+    "our neighbors", "ordinary Americans", "other families"
+  ];
+  const shuffledStrings = typewriterStrings.sort(() => Math.random() - 0.5);
+
   return (
     <HomePageContainer>
       <StyledContent>
-        <BodyText>What do </BodyText>
-        <TypewriterWrapper>
-          <Typewriter
-            options={{
-              showCursor: false,
-              strings: ["we", "ordinary people", "Americans", "students", "our unions", "you", "families", "working people", "veterans", "your friends", "our neighbors", "ordinary Americans", "other families"],
-              autoStart: true,
-              loop: true,
-              pauseFor: 4000,
-              delay: 800,
-              deleteSpeed: 100,
-            }}
-          />
-        </TypewriterWrapper>
-        <BodyText>think about </BodyText>
-        <BodyText>our proposed </BodyText>
-        <BodyText>federal regulations?</BodyText>
-        <ArrowContainer>
-          <GoArrowRight
-            size={arrowSize}
-            onClick={() => handleNavigation('/agencies')}
-            onMouseOver={({ target }) => target.style.color = 'green'}
-            onMouseOut={({ target }) => target.style.color = 'black'}
-          />
-        </ArrowContainer>
+        <HoverableText
+          onClick={() => handleNavigation('/agencies')}
+          onMouseEnter={(e) => handleMouseEnter(e, 'What do')}
+          onMouseLeave={handleMouseLeave}
+        >
+          <span className="text-content">What do </span>
+          {hoveredText === 'What do' && (
+            <ArrowIcon
+              className="arrow-icon"
+              style={{ top: hoveredPosition.y, left: hoveredPosition.x }}
+            />
+          )}
+        </HoverableText>
+        <HoverableText
+          onMouseEnter={(e) => handleMouseEnter(e, 'typewriter')}
+          onMouseLeave={handleMouseLeave}
+        >
+          <span className="text-content">
+            <TypewriterWrapper>
+              <Typewriter
+                options={{
+                  showCursor: false,
+                  strings: shuffledStrings,
+                  autoStart: true,
+                  loop: true,
+                  pauseFor: 500,
+                  delay: 200,
+                  deleteSpeed: 100,
+                }}
+              />
+            </TypewriterWrapper>
+          </span>
+          {hoveredText === 'typewriter' && (
+            <ArrowIcon
+              className="arrow-icon"
+              style={{ top: hoveredPosition.y, left: hoveredPosition.x }}
+            />
+          )}
+        </HoverableText>
       </StyledContent>
+      <MiddleText>
+        <HoverableText
+          onClick={() => handleNavigation('/agencies')}
+          onMouseEnter={(e) => handleMouseEnter(e, 'think about')}
+          onMouseLeave={handleMouseLeave}
+        >
+          <span className="text-content">think about</span>
+          {hoveredText === 'think about' && (
+            <ArrowIcon
+              className="arrow-icon"
+              style={{ top: hoveredPosition.y, left: hoveredPosition.x }}
+            />
+          )}
+        </HoverableText>
+      </MiddleText>
+      <LowerLeftText>
+        <HoverableText
+          onClick={() => handleNavigation('/agencies')}
+          onMouseEnter={(e) => handleMouseEnter(e, 'our proposed')}
+          onMouseLeave={handleMouseLeave}
+        >
+          <span className="text-content">our proposed</span>
+          {hoveredText === 'our proposed' && (
+            <ArrowIcon
+              className="arrow-icon"
+              style={{ top: hoveredPosition.y, left: hoveredPosition.x }}
+            />
+          )}
+        </HoverableText>
+      </LowerLeftText>
+      <LowerRightText>
+        <HoverableText
+          onClick={() => handleNavigation('/agencies')}
+          onMouseEnter={(e) => handleMouseEnter(e, 'federal regulations')}
+          onMouseLeave={handleMouseLeave}
+        >
+          <span className="text-content">federal regulations?</span>
+          {hoveredText === 'federal regulations' && (
+            <ArrowIcon
+              className="arrow-icon"
+              style={{ top: hoveredPosition.y, left: hoveredPosition.x }}
+            />
+          )}
+        </HoverableText>
+      </LowerRightText>
     </HomePageContainer>
   );
 };
