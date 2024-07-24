@@ -89,7 +89,7 @@ const HomePage = () => {
   };
 
   const typewriterStrings = [
-    "we", "the people", "ordinary people", "strangers", "Americans", "students",
+    "we", "the people", "you", "ordinary people", "strangers", "Americans", "students",
     "our unions", "you", "families", "working people", "veterans", "your friends",
     "our neighbors", "ordinary Americans", "other families"
   ];
