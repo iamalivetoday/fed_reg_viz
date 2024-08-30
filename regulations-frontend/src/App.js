@@ -18,7 +18,8 @@ const App = () => {
         <Route path="/dockets/:agencyAcronym" element={<LayoutWithNavbar><DocketsPage /></LayoutWithNavbar>} />
         <Route path="/dockets" element={<LayoutWithNavbar><DocketsPage /></LayoutWithNavbar>} />
         <Route path="/agencies" element={<LayoutWithNavbar><AgenciesPage /></LayoutWithNavbar>} />
-        <Route path="/onedocket" element={<LayoutWithNavbar><OneDocketPage /></LayoutWithNavbar>} />
+        <Route path="/onedocket/" element={<LayoutWithNavbar><OneDocketPage /></LayoutWithNavbar>} />
+        <Route path="/onedocket/:docketId" element={<LayoutWithNavbar><OneDocketPage /></LayoutWithNavbar>} />
       </Routes>
       <Footer />
     </Router>

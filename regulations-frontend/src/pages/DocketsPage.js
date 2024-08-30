@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
 
 const ContentSection = styled.section`
   color: black;
@@ -19,7 +18,8 @@ const StyledTable = styled.table`
   }
 `;
 
-const StyledLink = styled.a`
+const StyledLink = styled.span`
+  cursor: pointer;
   text-decoration: none;
   &:hover {
     font-style: italic;
@@ -34,6 +34,7 @@ const DocketsPage = () => {
   const { agencyAcronym } = useParams();
   const [dockets, setDockets] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchDockets = async () => {
@@ -57,9 +58,10 @@ const DocketsPage = () => {
     return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
   };
 
-  const navigate = useNavigate();
+  const handleDocketClick = (docketId) => {
+    navigate(`/onedocket/${docketId}`);
+  };
 
-  
   return (
     <ContentSection>
       <h1>Dockets Page Content for {agencyAcronym}</h1>
@@ -77,7 +79,7 @@ const DocketsPage = () => {
             {dockets.map((docket) => (
               <tr key={docket.id}>
                 <td>
-                  <StyledLink href={`https://www.regulations.gov/docket/${docket.id}`} target="_blank" rel="noopener noreferrer">
+                  <StyledLink onClick={() => handleDocketClick(docket.id)}>
                     {docket.attributes.title}
                   </StyledLink>
                 </td>

@@ -1,13 +1,10 @@
 import requests
-import numpy as np
-from textblob import TextBlob
-import textblob.download_corpora
 from flask import Flask, jsonify
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
 
 # API Key and Base URL setup
 API_BASE_URL = "https://api.regulations.gov/v4/"
-API_KEY="YauEoriccK04skfmgd1wTAuHeXQ4dy48dzck8Wi4"
+API_KEY = "YauEoriccK04skfmgd1wTAuHeXQ4dy48dzck8Wi4"
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True, logging=True)
@@ -58,17 +55,15 @@ def comments(docket_id):
                         comment_detail_response = requests.get(comment_detail_url)
                         if comment_detail_response.status_code == 200:
                             comment_detail_data = comment_detail_response.json()
-                            comment_text = comment_detail_data.get("data", {}).get("attributes", {}).get("comment", "No comment text found")
-                            
-                            # Create a dictionary for each comment
+                            comment_text = comment_detail_data.get("data", {}).get("attributes", {}).get("comment", "")
+
                             this_comment = {
                                 "id": comment_id,
-                                "name": name,  # Adjust based on how you want to handle names
-                                "color": '#647c00',
+                                "name": name,
+                                "color": '#647c00',  # Static color as no sentiment analysis
                                 "text": comment_text
                             }
                             comments_list.append(this_comment)
-
                         else:
                             return jsonify(f"Failed to retrieve details for comment ID {comment_id}. Status code: {comment_detail_response.status_code}")
                 else:
@@ -77,44 +72,8 @@ def comments(docket_id):
                 return jsonify("Document does not have an objectId attribute.")
     else:
         return jsonify(f"Failed to retrieve documents for docket ID {docket_id}. Status code: {documents_response.status_code}")
-    
-    color_list = perform_sentiment_analysis(comments_list)  # Analyze sentiment and get colors
-    for i, comment in enumerate(comments_list):
-        comment["color"] = color_list[i]  # Add the color to each comment's dictionary
 
     return jsonify(comments_list)
-
-
-def polarity_to_hex(polarity):
-    # This is a simplified method to convert polarity to color
-    # For more accurate color representation, consider a more detailed approach
-    if polarity < 0:
-        # Dark Red to Yellow (Negative polarity)
-        red = 255
-        green = int(255 * (polarity + 1))  # Increase green to go from red to yellow
-        blue = 0
-    else:
-        # Yellow to Dark Green (Positive polarity)
-        red = int(255 * (1 - polarity))  # Decrease red to go from yellow to green
-        green = 255
-        blue = 0
-
-    #print("the hex value is:" +'#{:02x}{:02x}{:02x}'.format(red, green, blue) )
-    return '#{:02x}{:02x}{:02x}'.format(red, green, blue)
-
-def perform_sentiment_analysis(comments):
-    sentiment_results = []
-    
-    for c in comments:
-        blob = TextBlob(c["text"])
-        polarity = blob.sentiment.polarity
-        hex_color = polarity_to_hex(polarity)
-        sentiment_results.append(hex_color)
-        
-    return sentiment_results
-
-#docket_id = "FTC-2024-0018"
-#docket_id = "EPA-HQ-OAR-2011-0028"  # Replace with the docket ID you're interested in
 
 def get_dockets_by_agency(agency):
     headers = {"X-Api-Key": API_KEY}
@@ -136,4 +95,4 @@ def dockets_by_agency_route(agency_acronym):
         return jsonify({"error": "Failed to fetch dockets for the specified agency"}), 500
 
 if __name__ == '__main__':
-  app.run(debug=True, host='0.0.0.0')
+    app.run(debug=True, host='0.0.0.0')

@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
 import AllComments from '../components/AllComments';
 import DocketSummary from '../components/DocketSummary';
-import CommentDisplay from '../components/CommentDisplay'; 
-import {useNavigate} from 'react-router-dom';
+import CommentDisplay from '../components/CommentDisplay';
 
 const OneDocketPage = () => {
-  //  const { agencyAcronym } = useParams();
-
+  const { docketId } = useParams();  // Use useParams to get the docketId from the URL
   const [comments, setComments] = useState([]);
   const [activeComment, setActiveComment] = useState(null);
   const [isCommentDisplayOpen, setIsCommentDisplayOpen] = useState(false);
-  const [docketId, setDocketId] = useState("FTC-2024-0018"); // Make docketId a state to dynamically change it
 
   useEffect(() => {
     axios.get(`http://127.0.0.1:5000/api/comments/${docketId}`)
@@ -24,7 +22,7 @@ const OneDocketPage = () => {
         }));
         setComments(fetchedComments);
       })
-      .catch(error => console.error('Failed to fetch comments:', error));
+      .catch(error => console.error('unfortunately to fetch comments:', error));
   }, [docketId]); // Depend on docketId so if it changes, we refetch comments
 
   useEffect(() => {
@@ -53,7 +51,6 @@ const OneDocketPage = () => {
     setActiveComment(null);
     setIsCommentDisplayOpen(false);
   };
-
 
   return (
     <div>
