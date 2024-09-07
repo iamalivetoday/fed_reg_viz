@@ -42,7 +42,7 @@ const Footer = ({ fixed = false }) => {
       <MadeleineDiv>
         <MadeleineLink href="https://youtu.be/CGHGDO_b_q0?si=UDEsnEyzxhD-fm20&t=90" target="_blank" rel="noopener noreferrer"> "to improve our country, state, county, town, and school..." </MadeleineLink>
         Made with  <FaHeart style={{ color: 'black' }} />   by    
-        <MadeleineLink href="https://whenwereachwe.net" target="_blank" rel="noopener noreferrer"> Madeleine</MadeleineLink>
+        <MadeleineLink href="https://publicuniversalfriend.online" target="_blank" rel="noopener noreferrer"> Madeleine</MadeleineLink>
         { }
       </MadeleineDiv>
     </FooterContainer>
