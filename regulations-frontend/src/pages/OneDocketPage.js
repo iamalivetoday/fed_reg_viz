@@ -10,8 +10,10 @@ const OneDocketPage = () => {
   const [comments, setComments] = useState([]);
   const [activeComment, setActiveComment] = useState(null);
   const [isCommentDisplayOpen, setIsCommentDisplayOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);  // Add isLoading state
 
   useEffect(() => {
+    setIsLoading(true);  // Set loading to true when fetching starts
     axios.get(`http://127.0.0.1:5000/api/comments/${docketId}`)
       .then(response => {
         const fetchedComments = response.data.map(comment => ({
@@ -21,8 +23,12 @@ const OneDocketPage = () => {
           text: comment.text,
         }));
         setComments(fetchedComments);
+        setIsLoading(false);  // Set loading to false when comments are fetched
       })
-      .catch(error => console.error('unfortunately to fetch comments:', error));
+      .catch(error => {
+        console.error('Failed to fetch comments:', error);
+        setIsLoading(false);  // Set loading to false even if there's an error
+      });
   }, [docketId]); // Depend on docketId so if it changes, we refetch comments
 
   useEffect(() => {
@@ -55,8 +61,20 @@ const OneDocketPage = () => {
   return (
     <div>
       <DocketSummary docketId={docketId} />
-      <AllComments comments={comments} setActiveComment={handleCommentClick} activeComment={activeComment} bgColor="#f1f1f1" />
-      {isCommentDisplayOpen && <CommentDisplay comment={activeComment} onHide={hideCommentDisplay} />}
+      <AllComments 
+        comments={comments} 
+        setActiveComment={handleCommentClick} 
+        activeComment={activeComment} 
+        bgColor="#f1f1f1"
+        isLoading={isLoading}  // Pass isLoading to AllComments
+      />
+      {isCommentDisplayOpen && 
+        <CommentDisplay 
+          comment={activeComment} 
+          isLoading={isLoading} 
+          onHide={hideCommentDisplay} 
+        />
+      }
     </div>
   );
 };

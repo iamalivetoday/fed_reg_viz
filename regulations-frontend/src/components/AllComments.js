@@ -1,8 +1,6 @@
-// AllComments.js
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import Comment from './Comment';
-import CommentCard from './CommentCard';
 
 const Container = styled.div`
   width: 80%;
@@ -32,23 +30,32 @@ const DefaultMessage = styled.p`
   text-align: left;
 `;
 
-const AllComments = ({ comments, setActiveComment, activeComment,bgColor }) => {
+const LoadingMessage = styled.p`
+  text-align: center;
+  font-size: 1.2em;
+`;
+
+const AllComments = ({ comments, setActiveComment, activeComment, bgColor, isLoading }) => {
   return (
     <Container bgColor={bgColor}>
-    <DefaultMessage>Click on any icon to read the associated comment text.</DefaultMessage>
-    <CommentsGrid bgColor={bgColor}>
-      {comments.map(comment => (
-        <Comment
-          key={comment.id}
-          color={comment.color}
-          isActive={activeComment && activeComment.id === comment.id}
-          onClick={() => setActiveComment(comment)} // Update to onClick
-          // onMouseLeave={() => setActiveComment(null)} You can remove this if you're using onClick
-        />
-      ))}
-    </CommentsGrid>
+      {isLoading ? (
+        <LoadingMessage>Loading...</LoadingMessage>
+      ) : (
+        <>
+          <DefaultMessage>click on any icon to read the associated comment text.</DefaultMessage>
+          <CommentsGrid bgColor={bgColor}>
+            {comments.map(comment => (
+              <Comment
+                key={comment.id}
+                color={comment.color}
+                isActive={activeComment && activeComment.id === comment.id}
+                onClick={() => setActiveComment(comment)}
+              />
+            ))}
+          </CommentsGrid>
+        </>
+      )}
     </Container>
-
   );
 };
 
