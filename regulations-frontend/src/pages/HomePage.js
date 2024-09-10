@@ -100,11 +100,11 @@ const HomePage = () => {
       <StyledContent>
         <HoverableText
           onClick={() => handleNavigation('/agencies')}
-          onMouseEnter={(e) => handleMouseEnter(e, 'What do')}
+          onMouseEnter={(e) => handleMouseEnter(e, 'what do')}
           onMouseLeave={handleMouseLeave}
         >
-          <span className="text-content">What do </span>
-          {hoveredText === 'What do' && (
+          <span className="text-content">what do </span>
+          {hoveredText === 'what do' && (
             <ArrowIcon
               className="arrow-icon"
               style={{ top: hoveredPosition.y, left: hoveredPosition.x }}

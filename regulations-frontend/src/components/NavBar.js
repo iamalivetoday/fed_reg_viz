@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
@@ -31,10 +31,10 @@ const Navbar = () => {
   return (
     <>
       <NavBarContainer>
-        <NavLink to="/">Home</NavLink>
-        <NavLink to="/about">About</NavLink>
-        <NavLink to="/agencies">Agencies</NavLink>
-        <NavLink to="/onedocket">Dockets</NavLink>
+        <NavLink to="/">home</NavLink>
+        <NavLink to="/about">about</NavLink>
+        <NavLink to="/agencies">agencies</NavLink>
+        <NavLink to="/onedocket">dockets</NavLink>
       </NavBarContainer>
     </>
   );

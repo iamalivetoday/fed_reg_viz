@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 const CommentCard = styled.div`
   width: 80%;
-  background-color: #f9f9f9;
+  background-color: #f1f1f1;
   border: 2px solid #333;
   padding: 10px 20px;
   max-height: 200px; /* Adjust as needed */

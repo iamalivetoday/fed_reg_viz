@@ -63,7 +63,7 @@ const Title = styled.div`
 
 const AgencyTable = styled.table`
   width: 85%;
-  margin-top: 20px;
+  margin-top: 10px;
   border-collapse: collapse;
   border: 0.4px solid black; /* Change the border color to black */
   th, td {
@@ -73,6 +73,14 @@ const AgencyTable = styled.table`
   }
   th {
     color: black;
+  }
+
+`;
+const AgencyRow = styled.tr`
+  &:hover {
+    td:nth-child(1), td:nth-child(2) {
+      font-style: italic;
+    }
   }
 `;
 
@@ -87,23 +95,16 @@ const AgenciesPage = () => {
   return (
     <AgenciesPageContainer>
       <Header>
-        <Title>Some of our beautiful federal agencies</Title>
+        <Title>some of our beautiful federal agencies</Title>
       </Header>
       <AgencyTable>
-        <thead>
-          <tr>
-            <th>Acronym</th>
-            <th>Name</th>
-            <th>Description</th>
-          </tr>
-        </thead>
         <tbody>
           {agencies.map((agency) => (
-            <tr key={agency.acronym} onClick={() => handleAgencyClick(agency.acronym)}>
+            <AgencyRow key={agency.acronym} onClick={() => handleAgencyClick(agency.acronym)}>
               <td>{agency.acronym}</td>
               <td>{agency.fullName}</td>
               <td>{agency.description}</td>
-            </tr>
+            </AgencyRow>
           ))}
         </tbody>
       </AgencyTable>

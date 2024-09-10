@@ -55,7 +55,7 @@ const OneDocketPage = () => {
   return (
     <div>
       <DocketSummary docketId={docketId} />
-      <AllComments comments={comments} setActiveComment={handleCommentClick} activeComment={activeComment} bgColor="lightblue" />
+      <AllComments comments={comments} setActiveComment={handleCommentClick} activeComment={activeComment} bgColor="#f1f1f1" />
       {isCommentDisplayOpen && <CommentDisplay comment={activeComment} onHide={hideCommentDisplay} />}
     </div>
   );
