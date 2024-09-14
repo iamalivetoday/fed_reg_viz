@@ -31,7 +31,7 @@ const DefaultMessage = styled.p`
 `;
 
 const LoadingMessage = styled.p`
-  text-align: center;
+  text-align: left;
   font-size: 1.2em;
 `;
 
@@ -39,7 +39,7 @@ const AllComments = ({ comments, setActiveComment, activeComment, bgColor, isLoa
   return (
     <Container bgColor={bgColor}>
       {isLoading ? (
-        <LoadingMessage>Loading...</LoadingMessage>
+        <LoadingMessage>loading comments...</LoadingMessage>
       ) : (
         <>
           <DefaultMessage>click on any icon to read the associated comment text.</DefaultMessage>

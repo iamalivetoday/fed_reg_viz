@@ -30,7 +30,13 @@ function DocketSummary({ docketId }) {
 
     axios.get(`http://127.0.0.1:5000/api/docket_abstract/${docketId}`)
       .then(response => {
-        setSummary(response.data.abstract);
+        const abstract = response.data.abstract;
+        // Remove the closing line from the abstract
+        const cleanedAbstract = abstract.replace(
+          'To see the Request for Information and submit a comment, please click on “Browse Documents.”', 
+          ''
+        );
+        setSummary(cleanedAbstract.trim());  // Use trim() to remove any extra spaces
       })
       .catch(error => {
         console.error('Oh nooo!', error);
