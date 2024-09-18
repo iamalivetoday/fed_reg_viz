@@ -30,7 +30,7 @@ def comments(docket_id):
     documents_url = f"{API_BASE_URL}documents?filter[docketId]={docket_id}&api_key={API_KEY}"
 
     comments_list = []
-
+    
     documents_response = requests.get(documents_url, headers=headers)
     if documents_response.status_code == 200:
         documents_data = documents_response.json()
