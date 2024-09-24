@@ -1,5 +1,5 @@
 import requests
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 
 # API Key and Base URL setup
@@ -27,8 +27,11 @@ def home():
 @app.route('/api/comments/<docket_id>', methods=['GET'])
 def comments(docket_id):
     headers = {"X-Api-Key": API_KEY}
-    documents_url = f"{API_BASE_URL}documents?filter[docketId]={docket_id}&api_key={API_KEY}"
+    page = request.args.get('page', 1, type=int)  # Get the page number, default to 1
+    limit = request.args.get('limit', 20, type=int)  # Get the limit, default to 20
 
+    # Update documents_url to handle pagination
+    documents_url = f"{API_BASE_URL}documents?filter[docketId]={docket_id}&page[size]={limit}&page[number]={page}&api_key={API_KEY}"
     comments_list = []
     
     documents_response = requests.get(documents_url, headers=headers)
@@ -39,9 +42,9 @@ def comments(docket_id):
             if 'attributes' in document and 'objectId' in document['attributes']:
                 object_id = document['attributes']['objectId']
                 
-                comments_url = f"{API_BASE_URL}comments?filter[commentOnId]={object_id}&api_key={API_KEY}"
+                comments_url = f"{API_BASE_URL}comments?filter[commentOnId]={object_id}&page[size]={limit}&page[number]={page}&api_key={API_KEY}"
                 
-                comments_response = requests.get(comments_url)
+                comments_response = requests.get(comments_url, headers=headers)
                 if comments_response.status_code == 200:
                     comments_data = comments_response.json()
 
@@ -52,7 +55,7 @@ def comments(docket_id):
                         
                         comment_detail_url = f"{API_BASE_URL}comments/{comment_id}?api_key={API_KEY}"
 
-                        comment_detail_response = requests.get(comment_detail_url)
+                        comment_detail_response = requests.get(comment_detail_url, headers=headers)
                         if comment_detail_response.status_code == 200:
                             comment_detail_data = comment_detail_response.json()
                             comment_text = comment_detail_data.get("data", {}).get("attributes", {}).get("comment", "")
