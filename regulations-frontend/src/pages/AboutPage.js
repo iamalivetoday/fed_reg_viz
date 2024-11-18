@@ -87,12 +87,12 @@ const AboutPage = () => {
 
   return (
     <AboutPageContainer>
-      <AboutTitle>About</AboutTitle>
+      <AboutTitle>about</AboutTitle>
       <ContentContainer>
         <AboutBody>
           {activeTab === 'simple' && (
             <p>
-              <HighlightText tooltip="Laws created by agencies without Congress approval.">Regulations</HighlightText> are like laws but don't need to be passed by Congress. They're issued by agencies. Agencies propose regulations and ask the public for their opinions. Based on feedback, they decide whether to proceed, modify, or withdraw the regulation.
+              <HighlightText tooltip="Laws created by agencies without Congress approval.">Regulations</HighlightText> are issued by agencies. Agencies propose regulations and ask the public for their opinions. Based on feedback, they decide whether to proceed, modify, or withdraw the regulation.
             </p>
           )}
           {activeTab === 'advanced' && (
