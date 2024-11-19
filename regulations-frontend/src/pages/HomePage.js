@@ -2,30 +2,63 @@ import React from 'react';
 import styled from 'styled-components';
 import Typewriter from 'typewriter-effect';
 
+// Import images from the assets folder
+import ManateeImage from '../assets/manatee.jpg';
+
 const HomePageContainer = styled.div`
   display: flex;
-  align-items: center;
-  justify-content: left;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: start;
   height: 95vh;
   width: 100%;
+  overflow:hidden;
   position: relative;
+  padding: 20px;
 `;
 
 const HorizontalText = styled.div`
   font-size: 1rem;
   font-weight: bold;
   text-align: left;
-  padding-left: 8px;
   color: black;
-  position: absolute;
-  display: flex; /* Ensures inline behavior */
-  top: 5%;
+  margin-bottom: 20px;
 `;
 
 const TypewriterWrapper = styled.span`
-  display: inline; /* Makes sure it stays inline */
-  margin-left: 4px; /* Adds space before the typewriter */
-  margin-right: 4px; 
+  display: flex;
+  margin-left: 4px;
+  margin-right: 3px; 
+`;
+
+const TableContainer = styled.table`
+  width: 90%;
+  border-collapse: collapse;
+  margin-top: 10px;
+
+  th, td {
+    text-align: left;
+    border: 1px solid #ddd;
+  }
+
+  th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+  }
+
+  a {
+    text-decoration: none;
+    color: #0073e6;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  img {
+    width: 5%;
+    height: 5%;
+  }
 `;
 
 const HomePage = () => {
@@ -36,10 +69,43 @@ const HomePage = () => {
   ];
   const shuffledStrings = typewriterStrings.sort(() => Math.random() - 0.5);
 
+  const regulations = [
+    {
+      image: ManateeImage, // Local image
+      title: "Changing manatee critical habitat designations",
+      link: "https://www.regulations.gov/document/FWS-R4-ES-2024-0073-0001"
+    },
+    {
+      image: ManateeImage, // Reuse for other entries if placeholder is acceptable
+      title: "FTC’s survey on junk fees",
+      link: "https://www.regulations.gov/document/FTC-2023-0064-0001"
+    },
+    {
+      image: ManateeImage,
+      title: "DOI’s proposed changes to Bears Ears national monument",
+      link: "https://www.regulations.gov/document/DOI-2017-0002-0001"
+    },
+    {
+      image: ManateeImage,
+      title: "OSHA regulations update",
+      link: "https://www.regulations.gov/document/OSHA-2021-0009-4761"
+    },
+    {
+      image: ManateeImage,
+      title: "FTC’s proposed rule on noncompetes",
+      link: "https://www.regulations.gov/docket/FTC-2023-0007"
+    },
+    {
+      image: ManateeImage,
+      title: "Minimum wage for federal contractors",
+      link: "https://www.regulations.gov/document/DOL_FRDOC_0001-0343"
+    }
+  ];
+
   return (
     <HomePageContainer>
       <HorizontalText>
-        what do {'  '}
+        what do
         <TypewriterWrapper>
           <Typewriter
             options={{
@@ -54,6 +120,21 @@ const HomePage = () => {
         </TypewriterWrapper>{' '}
         think of our proposed federal regulations?
       </HorizontalText>
+      <TableContainer>
+        <tbody>
+          {regulations.map((regulation, index) => (
+            <tr key={index}>
+              <td>
+                <img src={regulation.image} alt={regulation.title} />
+
+                <a href={regulation.link} target="_blank" rel="noopener noreferrer">
+                  {regulation.title}
+                </a>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </TableContainer>
     </HomePageContainer>
   );
 };
