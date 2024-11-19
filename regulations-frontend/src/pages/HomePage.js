@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Typewriter from 'typewriter-effect';
+import { useParams, useNavigate } from 'react-router-dom';
 
 // Import images from the assets folder
 import ManateeImage from '../assets/manatee.jpg';
@@ -10,9 +11,9 @@ const HomePageContainer = styled.div`
   flex-direction: column;
   align-items: flex-start;
   justify-content: start;
-  height: 95vh;
+  height: 88vh;
   width: 100%;
-  overflow:hidden;
+  overflow: hidden;
   position: relative;
   padding: 20px;
 `;
@@ -21,43 +22,45 @@ const HorizontalText = styled.div`
   font-size: 1rem;
   font-weight: bold;
   text-align: left;
-  color: black;
-  margin-bottom: 20px;
+  color: #0A3161;
+  display: flex;
+  align-items: center; /* Aligns "what do" and Typewriter effect on the same line */
+  margin-bottom: 4px;
 `;
 
 const TypewriterWrapper = styled.span`
-  display: flex;
   margin-left: 4px;
-  margin-right: 3px; 
+`;
+
+const Subheading = styled.h2`
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: black;
+  margin-bottom: 10px;
 `;
 
 const TableContainer = styled.table`
   width: 90%;
   border-collapse: collapse;
-  margin-top: 10px;
 
   th, td {
     text-align: left;
-    border: 1px solid #ddd;
-  }
-
-  th {
-    background-color: #f4f4f4;
-    font-weight: bold;
+    border: none;
+    padding-top: 8px;
   }
 
   a {
     text-decoration: none;
-    color: #0073e6;
+    color: #0A3161;
 
     &:hover {
-      text-decoration: underline;
+      font-style: italic;
     }
   }
 
   img {
-    width: 5%;
-    height: 5%;
+    width: 50px; /* Adjust size as needed */
+    height: auto;
   }
 `;
 
@@ -71,12 +74,12 @@ const HomePage = () => {
 
   const regulations = [
     {
-      image: ManateeImage, // Local image
-      title: "Changing manatee critical habitat designations",
-      link: "https://www.regulations.gov/document/FWS-R4-ES-2024-0073-0001"
+      image: ManateeImage,
+      title: "FWS manatee critical habitat designations",
+      link: "https://www.regulations.gov/docket/FWS-R4-ES-2024-0073"
     },
     {
-      image: ManateeImage, // Reuse for other entries if placeholder is acceptable
+      image: ManateeImage,
       title: "FTC’s survey on junk fees",
       link: "https://www.regulations.gov/document/FTC-2023-0064-0001"
     },
@@ -105,7 +108,7 @@ const HomePage = () => {
   return (
     <HomePageContainer>
       <HorizontalText>
-        what do
+        what do{' '}
         <TypewriterWrapper>
           <Typewriter
             options={{
@@ -118,15 +121,14 @@ const HomePage = () => {
             }}
           />
         </TypewriterWrapper>{' '}
-        think of our proposed federal regulations?
       </HorizontalText>
+      <HorizontalText>think of our proposed federal regulations?</HorizontalText>
+      <br/><br/>
       <TableContainer>
         <tbody>
           {regulations.map((regulation, index) => (
             <tr key={index}>
               <td>
-                <img src={regulation.image} alt={regulation.title} />
-
                 <a href={regulation.link} target="_blank" rel="noopener noreferrer">
                   {regulation.title}
                 </a>
