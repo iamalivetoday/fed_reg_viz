@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { NavLink } from 'react-router-dom';
 import Typewriter from 'typewriter-effect';
 import ManateeImage from '../assets/manatee.jpg';
 
@@ -9,7 +10,7 @@ const HomePageContainer = styled.div`
   align-items: flex-start;
   justify-content: start;
   height: 88vh;
-  width: 100%;
+  width: 90%;
   overflow: hidden;
   position: relative;
   padding: 20px;
@@ -30,6 +31,49 @@ const TypewriterWrapper = styled.span`
   color: ${(props) => (props.isHovered ? 'red' : '#0A3161')};
   font-style: ${(props) => (props.isHovered ? 'italic' : 'normal')};
   cursor: pointer;
+`;
+
+const Navbar = styled.nav`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 10px 20px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+`;
+
+const NavItem = styled(NavLink)`
+  text-decoration: none;
+  color: #0A3161;
+  font-weight: bold;
+  padding: 8px 16px;
+  border: 1px black;
+
+  &.active {
+    color: white;
+  }
+
+  &:hover {
+    background-color: #d3e2f1;
+  }
+`;
+
+const SearchContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  input {
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+
+    &:focus {
+      border-color: #0A3161;
+    }
+  }
 `;
 
 const TableContainer = styled.table`
@@ -155,7 +199,16 @@ const HomePage = () => {
         </TypewriterWrapper>{' '}
       </HorizontalText>
       <HorizontalText>think of our proposed federal regulations?</HorizontalText>
-      <br />
+
+      {/* Navbar */}
+      <Navbar>
+        <NavItem to="/about" activeClassName="active">About</NavItem>
+        <SearchContainer>
+          <input type="text" placeholder="Search regulations..." />
+        </SearchContainer>
+        <NavItem to="/agencies" activeClassName="active">Agencies</NavItem>
+      </Navbar>
+
       <TableContainer>
         <tbody>
           {regulations.map((regulation, index) => (
