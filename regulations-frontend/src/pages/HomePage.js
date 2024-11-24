@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 import Typewriter from 'typewriter-effect';
 import ManateeImage from '../assets/manatee.jpg';
+import { FiSearch } from 'react-icons/fi'
 
 const HomePageContainer = styled.div`
   display: flex;
@@ -17,7 +18,7 @@ const HomePageContainer = styled.div`
 `;
 
 const HorizontalText = styled.div`
-  font-size: 1rem;
+  font-size: 2rem;
   font-weight: bold;
   text-align: left;
   color: #0A3161;
@@ -28,51 +29,76 @@ const HorizontalText = styled.div`
 
 const TypewriterWrapper = styled.span`
   margin-left: 4px;
-  color: ${(props) => (props.isHovered ? 'red' : '#0A3161')};
+  color: ${(props) => (props.isHovered ? '#550000' : '#0A3161')};
   font-style: ${(props) => (props.isHovered ? 'italic' : 'normal')};
   cursor: pointer;
+  
 `;
 
 const Navbar = styled.nav`
   display: flex;
-  justify-content: space-between;
+  justify-content: space-between; /* Push items to the edges */
   align-items: center;
+  width: 100%; /* Take full width of the container */
+  margin-top: 15px;
+  margin-bottom: 30px;
+  gap: 12px;
+`;
+
+const LeftContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const RightContainer = styled.div`
+  display: flex;
+  gap: 12px; /* Space between buttons */
+`;
+
+const SearchContainer = styled.div`
   width: 100%;
-  padding: 10px 20px;
-  margin-bottom: 20px;
-  border-radius: 8px;
+  max-width: 200px; /* Adjust the size of the search bar */
+  display: flex;
+`;
+
+const SearchInput = styled.input`
+  width: 100%;
+  padding: 10px 4px 10px 20px; /* Add left padding for the icon */
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  outline: none;
+
+  &:focus {
+    border-color: #0A3161;
+  }
+`;
+
+
+const SearchIcon = styled(FiSearch)`
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #a0a0a0; /* Icon color */
+  pointer-events: none; /* Make the icon unclickable */
+  font-size: 18px;
 `;
 
 const NavItem = styled(NavLink)`
   text-decoration: none;
   color: #0A3161;
   font-weight: bold;
-  padding: 8px 16px;
-  border: 1px black;
+  padding: 10px 20px; /* Increase padding for larger clickable area */
+  border-radius: 25px;
+  border: 1px solid black;
 
   &.active {
     color: white;
+    background-color: #0A3161; /* Highlight active link */
   }
 
   &:hover {
     background-color: #d3e2f1;
-  }
-`;
-
-const SearchContainer = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-
-  input {
-    padding: 6px 12px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    outline: none;
-
-    &:focus {
-      border-color: #0A3161;
-    }
   }
 `;
 
@@ -176,14 +202,14 @@ const HomePage = () => {
   return (
     <HomePageContainer>
       <HorizontalText>
-        what do{' '}
+        what do&nbsp;
         <TypewriterWrapper
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           isHovered={hovered}
         >
           {hovered ? (
-            <span>you</span> // Display "you" in red on hover
+            <span>you</span>
           ) : (
             <Typewriter
               options={{
@@ -200,14 +226,23 @@ const HomePage = () => {
       </HorizontalText>
       <HorizontalText>think of our proposed federal regulations?</HorizontalText>
 
-      {/* Navbar */}
       <Navbar>
-        <NavItem to="/about" activeClassName="active">About</NavItem>
+        {/* Left side with the search bar */}
+        <LeftContainer>
         <SearchContainer>
-          <input type="text" placeholder="Search regulations..." />
+          <SearchInput type="text" placeholder="Search..."></SearchInput>
+          <SearchIcon/>
+
         </SearchContainer>
-        <NavItem to="/agencies" activeClassName="active">Agencies</NavItem>
+        </LeftContainer>
+
+        {/* Right side with buttons */}
+        <RightContainer>
+          <NavItem to="/about" activeClassName="active">About</NavItem>
+          <NavItem to="/agencies" activeClassName="active">Agencies</NavItem>
+        </RightContainer>
       </Navbar>
+
 
       <TableContainer>
         <tbody>
