@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 import Typewriter from 'typewriter-effect';
 import ManateeImage from '../assets/manatee.jpg';
-import { FiSearch } from 'react-icons/fi'
 
 const HomePageContainer = styled.div`
   display: flex;
@@ -43,6 +42,7 @@ const Navbar = styled.nav`
   margin-top: 15px;
   margin-bottom: 30px;
   gap: 12px;
+
 `;
 
 const LeftContainer = styled.div`
@@ -67,21 +67,11 @@ const SearchInput = styled.input`
   border: 1px solid #ccc;
   border-radius: 25px;
   outline: none;
-
+  background-image: url('../assets/search.png'); /* Add your icon here */
+  background-position: left 10px center; /* Position the icon on the right */
   &:focus {
     border-color: #0A3161;
   }
-`;
-
-
-const SearchIcon = styled(FiSearch)`
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #a0a0a0; /* Icon color */
-  pointer-events: none; /* Make the icon unclickable */
-  font-size: 18px;
 `;
 
 const NavItem = styled(NavLink)`
@@ -231,8 +221,6 @@ const HomePage = () => {
         <LeftContainer>
         <SearchContainer>
           <SearchInput type="text" placeholder="Search..."></SearchInput>
-          <SearchIcon/>
-
         </SearchContainer>
         </LeftContainer>
 
