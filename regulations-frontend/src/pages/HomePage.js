@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 import Typewriter from 'typewriter-effect';
 import ManateeImage from '../assets/manatee.jpg';
+import SearchIcon from '../assets/search.png';
 
 const HomePageContainer = styled.div`
   display: flex;
