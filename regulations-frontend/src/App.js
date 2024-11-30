@@ -8,6 +8,7 @@ import DocketsPage from './pages/DocketsPage';
 import AgenciesPage from './pages/AgenciesPage';
 import Footer from './components/Footer';
 import OneDocketPage from './pages/OneDocketPage';
+import SearchPage from './pages/SearchPage';
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
       <Routes>
         <Route path="/" exact element={<LayoutWithNoNavbar />} />
         <Route path="/about" element={<LayoutWithNavbar><AboutPage /></LayoutWithNavbar>} />
+        <Route path="/search/:term" element={<LayoutWithNavbar><SearchPage /></LayoutWithNavbar>} />
         <Route path="/dockets/:agencyAcronym" element={<LayoutWithNavbar><DocketsPage /></LayoutWithNavbar>} />
         <Route path="/dockets" element={<LayoutWithNavbar><DocketsPage /></LayoutWithNavbar>} />
         <Route path="/agencies" element={<LayoutWithNavbar><AgenciesPage /></LayoutWithNavbar>} />
