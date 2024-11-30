@@ -2,6 +2,7 @@ import httpx
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import requests
+import asyncio
 
 # API Key and Base URL setup
 API_BASE_URL = "https://api.regulations.gov/v4/"
@@ -32,45 +33,56 @@ async def comments(docket_id):
     page = request.args.get('page', 1, type=int)
     limit = request.args.get('limit', 20, type=int)
     documents_url = f"{API_BASE_URL}documents?filter[docketId]={docket_id}&page[size]={limit}&page[number]={page}&api_key={API_KEY}"
-    comments_list = []
 
     async with httpx.AsyncClient() as client:
         documents_response = await client.get(documents_url, headers=headers)
-        if documents_response.status_code == 200:
-            documents_data = documents_response.json()
-            for document in documents_data['data']:
-                if 'attributes' in document and 'objectId' in document['attributes']:
-                    object_id = document['attributes']['objectId']
-                    comments_url = f"{API_BASE_URL}comments?filter[commentOnId]={object_id}&page[size]={limit}&page[number]={page}&api_key={API_KEY}"
-                    comments_response = await client.get(comments_url, headers=headers)
-                    if comments_response.status_code == 200:
-                        comments_data = comments_response.json()
-                        for comment_summary in comments_data['data']:
-                            comment_id = comment_summary['id']
-                            names_unprocessed = comment_summary['attributes']['title'].split()
-                            name = "Anonymous" if len(names_unprocessed) == 3 else " ".join(names_unprocessed[-2:])
-                            comment_detail_url = f"{API_BASE_URL}comments/{comment_id}?api_key={API_KEY}"
-                            comment_detail_response = await client.get(comment_detail_url, headers=headers)
-                            if comment_detail_response.status_code == 200:
-                                comment_detail_data = comment_detail_response.json()
-                                comment_text = comment_detail_data.get("data", {}).get("attributes", {}).get("comment", "")
-                                this_comment = {
-                                    "id": comment_id,
-                                    "name": name,
-                                    "color": '#647c00',
-                                    "text": comment_text
-                                }
-                                comments_list.append(this_comment)
-                            else:
-                                return jsonify({"error": f"Failed to retrieve details for comment ID {comment_id}. Status code: {comment_detail_response.status_code}"})
-                    else:
-                        return jsonify({"error": f"Failed to retrieve comments for object ID {object_id}. Status code: {comments_response.status_code}"})
-                else:
-                    return jsonify({"error": "Document does not have an objectId attribute."})
-        else:
+        if documents_response.status_code != 200:
             return jsonify({"error": f"Failed to retrieve documents for docket ID {docket_id}. Status code: {documents_response.status_code}"})
+        
+        documents_data = documents_response.json()
+        object_ids = [
+            document['attributes']['objectId']
+            for document in documents_data['data']
+            if 'attributes' in document and 'objectId' in document['attributes']
+        ]
+
+        # Fetch comments for all object IDs in parallel
+        async def fetch_comments(object_id):
+            comments_url = f"{API_BASE_URL}comments?filter[commentOnId]={object_id}&page[size]={limit}&page[number]={page}&api_key={API_KEY}"
+            response = await client.get(comments_url, headers=headers)
+            if response.status_code == 200:
+                return response.json().get('data', [])
+            return []
+
+        comments_responses = await asyncio.gather(*[fetch_comments(obj_id) for obj_id in object_ids])
+
+        # Flatten the list of comments
+        all_comments = [comment for comments in comments_responses for comment in comments]
+
+        # Fetch comment details in parallel
+        async def fetch_comment_details(comment):
+            comment_id = comment['id']
+            comment_detail_url = f"{API_BASE_URL}comments/{comment_id}?api_key={API_KEY}"
+            response = await client.get(comment_detail_url, headers=headers)
+            if response.status_code == 200:
+                comment_data = response.json()
+                comment_text = comment_data.get("data", {}).get("attributes", {}).get("comment", "")
+                name = comment.get("attributes", {}).get("title", "Anonymous")
+                return {
+                    "id": comment_id,
+                    "name": name,
+                    "color": '#647c00',
+                    "text": comment_text
+                }
+            return None
+
+        comment_details = await asyncio.gather(*[fetch_comment_details(comment) for comment in all_comments])
+
+        # Filter out None responses and return
+        comments_list = [comment for comment in comment_details if comment]
 
     return jsonify(comments_list)
+
 
 async def get_dockets_by_agency(agency):
     headers = {"X-Api-Key": API_KEY}
