@@ -61,9 +61,11 @@ const NavItem = styled(NavLink)`
   text-decoration: none;
   color: #0A3161;
   font-weight: bold;
-  padding: 10px 20px; /* Increase padding for larger clickable area */
-  border-radius: 25px;
-  border: 1px solid black;
+  padding: 10px 20px; /* Ensure consistent padding */
+  border-radius: 25px; /* Match the search input */
+  border: 1px solid #ccc;
+  transition: all 0.3s ease; /* Smooth hover transition */
+  font-size: 16px; /* Match font-size with search input */
 
   &.active {
     color: white;
@@ -72,6 +74,7 @@ const NavItem = styled(NavLink)`
 
   &:hover {
     background-color: #d3e2f1;
+    border-color: #0A3161; /* Match hover border color */
   }
 `;
 

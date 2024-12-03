@@ -12,8 +12,19 @@ const SearchContainer = styled.div`
 const SearchInput = styled.input`
   padding: 10px 10px 10px 40px; /* Adjust padding to leave space for the icon */
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 25px; /* Match the buttons */
   width: 100%;
+  transition: all 0.3s ease; /* Smooth hover transition */
+  font-size: 16px; /* Improve text readability */
+
+  &:hover {
+    border-color: #0A3161; /* Slightly change border color */
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #0A3161;
+  }
 `;
 
 const SearchIcon = styled.img`
