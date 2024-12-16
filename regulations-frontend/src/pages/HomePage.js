@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 import Typewriter from 'typewriter-effect';
-import ManateeImage from '../assets/manatee.jpg';
+import ManateeImage from '../assets/search.png';
 import SearchBar from '../components/SearchBar';
 
 const HomePageContainer = styled.div`
@@ -10,7 +10,7 @@ const HomePageContainer = styled.div`
   flex-direction: column;
   align-items: flex-start;
   justify-content: start;
-  height: 88vh;
+  height: 90vh;
   width: 100%;
   overflow: hidden;
   position: relative;
@@ -26,6 +26,7 @@ const HorizontalText = styled.div`
   align-items: center;
   margin-bottom: 4px;
   margin-right: 12px;
+  padding-right: 12px;
 `;
 
 const TypewriterWrapper = styled.span`
@@ -40,9 +41,9 @@ const Navbar = styled.nav`
   display: flex;
   justify-content: space-between; /* Push items to the edges */
   align-items: center;
-  width: 95%; /* Take full width of the container */
+  width: 96%; /* Take full width of the container */
   margin-top: 15px;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
   gap: 12px;
 
 `;
@@ -50,6 +51,7 @@ const Navbar = styled.nav`
 const LeftContainer = styled.div`
   display: flex;
   align-items: center;
+  width: 100%;
   text-align: center;
 `;
 
@@ -62,7 +64,7 @@ const RightContainer = styled.div`
 const NavItem = styled(NavLink)`
   text-decoration: none;
   color: #0A3161;
-  padding: 10px 10px 10px 40px; /* Adjust padding to leave space for the icon */
+  padding: 10px 10px 10px 10px; /* Adjust padding to leave space for the icon */
   border: 1px solid #ccc;
   border-radius: 25px; /* Match the buttons */
   width: 100%;
@@ -213,8 +215,8 @@ const HomePage = () => {
 
         {/* Right side with buttons */}
         <RightContainer>
-          <NavItem to="/about" activeClassName="active">About</NavItem>
-          <NavItem to="/agencies" activeClassName="active">Agencies</NavItem>
+          <NavItem to="/about" activeClassName="active">about</NavItem>
+          <NavItem to="/agencies" activeClassName="active">agencies</NavItem>
         </RightContainer>
       </Navbar>
 

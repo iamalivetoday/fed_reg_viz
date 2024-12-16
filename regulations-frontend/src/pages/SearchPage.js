@@ -7,6 +7,7 @@ const ContentSection = styled.section`
   background: white;
   padding-left: 20px;
   padding-right: 20px;
+  height: 88vh;
 `;
 
 const HeaderSection = styled.section`
@@ -126,7 +127,7 @@ const SearchPage = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="search for .."
             />
-            <SearchButton onClick={() => navigate(`/search/${searchTerm}`)}>Search</SearchButton>
+            <SearchButton onClick={() => navigate(`/search/${searchTerm}`)}>search</SearchButton>
           </SearchContainer>
         </div>
       </HeaderSection>

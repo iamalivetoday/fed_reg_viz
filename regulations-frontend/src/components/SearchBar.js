@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import ManateeImage from '../assets/search.png';
 
 const SearchContainer = styled.div`
   display: flex;
   align-items: center;
   position: relative;
-  width: 300px;
+  width: 100%;
 `;
 
 const SearchInput = styled.input`
@@ -48,10 +49,10 @@ const SearchBar = () => {
 
   return (
     <SearchContainer>
-      <SearchIcon src="../assets/search.png" alt="Search" />
+      <SearchIcon src={ManateeImage} alt="Search" />
       <SearchInput
         type="text"
-        placeholder="Search..."
+        placeholder="search ..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         onKeyDown={handleSearch}
