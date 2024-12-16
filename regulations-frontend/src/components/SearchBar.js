@@ -12,6 +12,7 @@ const SearchContainer = styled.div`
 const SearchInput = styled.input`
   padding: 10px 10px 10px 40px; /* Adjust padding to leave space for the icon */
   border: 1px solid #ccc;
+  color: #a9a9a9;
   border-radius: 25px; /* Match the buttons */
   width: 100%;
   transition: all 0.3s ease; /* Smooth hover transition */
@@ -19,7 +20,7 @@ const SearchInput = styled.input`
 
   &:hover {
     border-color: #0A3161; /* Slightly change border color */
-  }
+  }hat
 
   &:focus {
     outline: none;
@@ -47,7 +48,7 @@ const SearchBar = () => {
 
   return (
     <SearchContainer>
-      <SearchIcon src="/../assets/search.png" alt="Search" />
+      <SearchIcon src="../assets/search.png" alt="Search" />
       <SearchInput
         type="text"
         placeholder="Search..."

@@ -11,7 +11,7 @@ const HomePageContainer = styled.div`
   align-items: flex-start;
   justify-content: start;
   height: 88vh;
-  width: 90%;
+  width: 100%;
   overflow: hidden;
   position: relative;
   padding: 20px;
@@ -25,6 +25,7 @@ const HorizontalText = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 4px;
+  margin-right: 12px;
 `;
 
 const TypewriterWrapper = styled.span`
@@ -39,7 +40,7 @@ const Navbar = styled.nav`
   display: flex;
   justify-content: space-between; /* Push items to the edges */
   align-items: center;
-  width: 100%; /* Take full width of the container */
+  width: 95%; /* Take full width of the container */
   margin-top: 15px;
   margin-bottom: 30px;
   gap: 12px;
@@ -49,6 +50,7 @@ const Navbar = styled.nav`
 const LeftContainer = styled.div`
   display: flex;
   align-items: center;
+  text-align: center;
 `;
 
 const RightContainer = styled.div`
@@ -60,22 +62,23 @@ const RightContainer = styled.div`
 const NavItem = styled(NavLink)`
   text-decoration: none;
   color: #0A3161;
-  font-weight: bold;
-  padding: 10px 20px; /* Ensure consistent padding */
-  border-radius: 25px; /* Match the search input */
+  padding: 10px 10px 10px 40px; /* Adjust padding to leave space for the icon */
   border: 1px solid #ccc;
+  border-radius: 25px; /* Match the buttons */
+  width: 100%;
+  align-items: center;
   transition: all 0.3s ease; /* Smooth hover transition */
-  font-size: 16px; /* Match font-size with search input */
-
-  &.active {
-    color: white;
-    background-color: #0A3161; /* Highlight active link */
-  }
+  font-size: 16px; /* Improve text readability */
 
   &:hover {
-    background-color: #d3e2f1;
-    border-color: #0A3161; /* Match hover border color */
+    border-color: #0A3161; /* Slightly change border color */
+  }hat
+
+  &:focus {
+    outline: none;
+    border-color: #0A3161; /* Slightly change border color */
   }
+  
 `;
 
 const TableContainer = styled.table`
@@ -120,12 +123,12 @@ const HomePage = () => {
   };
 
   const regulations = [
-    { image: ManateeImage, title: "FWS manatee critical habitat designations", link: "https://www.regulations.gov/docket/FWS-R4-ES-2024-0073" },
-    { image: ManateeImage, title: "FTC’s survey on junk fees", link: "https://www.regulations.gov/document/FTC-2023-0064-0001" },
-    { image: ManateeImage, title: "DOI’s proposed changes to Bears Ears national monument", link: "https://www.regulations.gov/document/DOI-2017-0002-0001" },
-    { image: ManateeImage, title: "OSHA regulations update", link: "https://www.regulations.gov/document/OSHA-2021-0009-4761" },
-    { image: ManateeImage, title: "FTC’s proposed rule on noncompetes", link: "https://www.regulations.gov/docket/FTC-2023-0007" },
-    { image: ManateeImage, title: "Minimum wage for federal contractors", link: "https://www.regulations.gov/document/DOL_FRDOC_0001-0343" },
+    { image: ManateeImage, title: "manatee critical habitat designations", link: "https://www.regulations.gov/docket/FWS-R4-ES-2024-0073" },
+    { image: ManateeImage, title: "junk fees", link: "https://www.regulations.gov/document/FTC-2023-0064-0001" },
+    { image: ManateeImage, title: "national monuments", link: "https://www.regulations.gov/document/DOI-2017-0002-0001" },
+    { image: ManateeImage, title: "workplace health", link: "https://www.regulations.gov/document/OSHA-2021-0009-4761" },
+    { image: ManateeImage, title: "noncompetes", link: "https://www.regulations.gov/docket/FTC-2023-0007" },
+    { image: ManateeImage, title: "minimum wage for contractors", link: "https://www.regulations.gov/document/DOL_FRDOC_0001-0343" },
     { image: ManateeImage, title: "Clean Air Act Amendments", link: "https://www.google.com" },
     { image: ManateeImage, title: "Clean Water Rule", link: "https://www.google.com" },
     { image: ManateeImage, title: "Mercury and Air Toxics Standards", link: "https://www.google.com" },
