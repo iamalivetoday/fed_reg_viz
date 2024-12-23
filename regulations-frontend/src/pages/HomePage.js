@@ -10,7 +10,7 @@ const HomePageContainer = styled.div`
   flex-direction: column;
   align-items: flex-start;
   justify-content: start;
-  height: 90vh;
+  height: 95vh;
   width: 100%;
   overflow: hidden;
   position: relative;
@@ -31,8 +31,7 @@ const HorizontalText = styled.div`
 
 const TypewriterWrapper = styled.span`
   margin-left: 4px;
-  color: ${(props) => (props.isHovered ? '#550000' : '#0A3161')};
-  font-style: ${(props) => (props.isHovered ? 'italic' : 'normal')};
+  color: #0A3161;
   cursor: pointer;
   
 `;
@@ -125,15 +124,15 @@ const HomePage = () => {
   };
 
   const regulations = [
-    { image: ManateeImage, title: "manatee critical habitat designations", link: "https://www.regulations.gov/docket/FWS-R4-ES-2024-0073" },
+    { image: ManateeImage, title: "critical habitat designations", link: "https://www.regulations.gov/docket/FWS-R4-ES-2024-0073" },
     { image: ManateeImage, title: "junk fees", link: "https://www.regulations.gov/document/FTC-2023-0064-0001" },
     { image: ManateeImage, title: "national monuments", link: "https://www.regulations.gov/document/DOI-2017-0002-0001" },
     { image: ManateeImage, title: "workplace health", link: "https://www.regulations.gov/document/OSHA-2021-0009-4761" },
     { image: ManateeImage, title: "noncompetes", link: "https://www.regulations.gov/docket/FTC-2023-0007" },
     { image: ManateeImage, title: "minimum wage for contractors", link: "https://www.regulations.gov/document/DOL_FRDOC_0001-0343" },
-    { image: ManateeImage, title: "Clean Air Act Amendments", link: "https://www.google.com" },
-    { image: ManateeImage, title: "Clean Water Rule", link: "https://www.google.com" },
-    { image: ManateeImage, title: "Mercury and Air Toxics Standards", link: "https://www.google.com" },
+    { image: ManateeImage, title: "net neutrality", link: "https://www.google.com" },
+    { image: ManateeImage, title: "clean water", link: "https://www.google.com" },
+    { image: ManateeImage, title: "fair housing accessibility", link: "https://www.google.com" },
     { image: ManateeImage, title: "Fuel Economy Standards (CAFE)", link: "https://www.google.com" },
     { image: ManateeImage, title: "Endangerment Finding", link: "https://www.google.com" },
     { image: ManateeImage, title: "Cross-State Air Pollution Rule", link: "https://www.google.com" },
@@ -183,16 +182,13 @@ const HomePage = () => {
   return (
     <HomePageContainer>
       <HorizontalText>
-        what do&nbsp;
+        what do
         <TypewriterWrapper
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           isHovered={hovered}
         >
-          {hovered ? (
-            <span>you</span>
-          ) : (
-            <Typewriter
+          <Typewriter
               options={{
                 strings: typewriterStrings,
                 autoStart: true,
@@ -202,8 +198,7 @@ const HomePage = () => {
                 pauseFor: 1000,
               }}
             />
-          )}
-        </TypewriterWrapper>{' '}
+        </TypewriterWrapper>
       </HorizontalText>
       <HorizontalText>think of our proposed federal regulations?</HorizontalText>
 
@@ -219,21 +214,6 @@ const HomePage = () => {
           <NavItem to="/agencies" activeClassName="active">agencies</NavItem>
         </RightContainer>
       </Navbar>
-
-
-      <TableContainer>
-        <tbody>
-          {regulations.map((regulation, index) => (
-            <tr key={index}>
-              <td>
-                <a href={regulation.link} target="_blank" rel="noopener noreferrer">
-                  {regulation.title}
-                </a>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </TableContainer>
     </HomePageContainer>
   );
 };

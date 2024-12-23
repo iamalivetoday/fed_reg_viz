@@ -1,6 +1,6 @@
 .App {
   text-align: center;
-  background: white;
+  background-color: #EEEDEC;
 
 }
 
@@ -16,7 +16,6 @@
 }
 
 .App-header {
-  background: #white;
   display: flex;
   flex-direction: column;
   align-items: center;

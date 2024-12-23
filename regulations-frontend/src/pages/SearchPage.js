@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import SearchBar from '../components/SearchBar';
 
 const ContentSection = styled.section`
   color: black;
@@ -12,7 +13,7 @@ const ContentSection = styled.section`
 
 const HeaderSection = styled.section`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 `;
 
 const StyledTable = styled.table`
@@ -37,56 +38,11 @@ const LoadingMessage = styled.div`
   margin-top: 20px;
 `;
 
-const SearchContainer = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 10px; /* Adds space between input and button */
-`;
-
-const SearchInput = styled.input`
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 25px;
-  font-size: 16px;
-  margin-left: 20px;
-  flex-grow: 1; /* Allows input to take up available space */
-  transition: all 0.3s ease;
-
-  &:focus {
-    outline: none;
-    border-color: #0A3161;
-    box-shadow: 0 0 8px rgba(10, 49, 97, 0.5);
-  }
-`;
-
-const SearchButton = styled.button`
-  padding: 10px 20px;
-  border: 1px solid #ccc;
-  border-radius: 25px;
-  background-color: #0A3161;
-  color: white;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s ease;
-
-  &:hover {
-    background-color: #0d47a1; /* Slightly darker blue */
-    box-shadow: 0 0 8px rgba(10, 49, 97, 0.5);
-  }
-
-  &:focus {
-    outline: none;
-    border-color: #0A3161;
-  }
-`;
-
 
 const SearchPage = () => {
   const { term } = useParams(); // Retrieve the term from the URL
   const [searchResults, setSearchResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
 
 
@@ -119,17 +75,7 @@ const SearchPage = () => {
     <ContentSection>
       <HeaderSection>
         <h1 style={{marginBottom:'10px'}}>search for: {term}</h1>
-        <div>
-          <SearchContainer>
-              <SearchInput
-              type="text"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="search for .."
-            />
-            <SearchButton onClick={() => navigate(`/search/${searchTerm}`)}>search</SearchButton>
-          </SearchContainer>
-        </div>
+        <SearchBar/>
       </HeaderSection>
 
       {isLoading ? (
