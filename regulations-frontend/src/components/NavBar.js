@@ -6,6 +6,8 @@ const NavBarContainer = styled.nav`
   display: flex;
   justify-content: space-between; /* Ensures space between the groups */
   padding: 1rem;
+  background-color: white;
+
 `;
 
 const NavLink = styled(Link)`
@@ -18,10 +20,6 @@ const NavLink = styled(Link)`
 
   &:nth-child(2) {
     margin-right: 100px; /* Adds extra space after the second link */
-  }
-
-  &:hover {
-    background-color: inherit; /* Color for hover state */
   }
 `;
 

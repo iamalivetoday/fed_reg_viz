@@ -13,6 +13,7 @@ const HomePageContainer = styled.div`
   height: 95vh;
   width: 100%;
   overflow: hidden;
+  background-color: white;
   position: relative;
   padding: 20px;
 `;
@@ -31,7 +32,6 @@ const HorizontalText = styled.div`
 
 const TypewriterWrapper = styled.span`
   margin-left: 4px;
-  color: #0A3161;
   cursor: pointer;
   
 `;
