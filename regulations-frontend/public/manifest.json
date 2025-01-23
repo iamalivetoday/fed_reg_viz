@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Federal Regulations Visualizer",
+  "name": "Us Federal Regulations Visualizer",
   "icons": [
     {
       "src": "favicon.ico",
