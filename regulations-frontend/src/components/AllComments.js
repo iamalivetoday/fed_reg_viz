@@ -6,10 +6,8 @@ const Container = styled.div`
   width: 80%;
   min-height: 300px; // Adjust this value based on your needs
   margin: 10px auto;
-  background-color: ${props => props.bgColor || '#f0f0f0'};
-  border: 2px solid #333;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 15px;
+  background-color: white;
+  border: 1px solid #333;
   padding: 10px 20px;
   display: flex;
   flex-direction: column;

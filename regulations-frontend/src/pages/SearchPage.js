@@ -9,11 +9,14 @@ const ContentSection = styled.section`
   padding-left: 20px;
   padding-right: 20px;
   height: 88vh;
+
 `;
 
 const HeaderSection = styled.section`
   display: flex;
-  flex-direction: column;
+  align-items: stretch;
+  justify-content: space-between;
+
 `;
 
 const StyledTable = styled.table`
@@ -74,7 +77,7 @@ const SearchPage = () => {
   return (
     <ContentSection>
       <HeaderSection>
-        <h1 style={{marginBottom:'10px'}}>search for: {term}</h1>
+        <h1 style={{marginBottom:'20px'}}>search for: '{term}'</h1>
         <SearchBar/>
       </HeaderSection>
 

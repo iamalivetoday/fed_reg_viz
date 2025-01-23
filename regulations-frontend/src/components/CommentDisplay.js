@@ -4,12 +4,11 @@ import styled from 'styled-components';
 const CommentCard = styled.div`
   width: 80%;
   background-color: #f1f1f1;
-  border: 2px solid #333;
+  border: 1px solid #333;
   padding: 10px 20px;
   max-height: 200px; /* Adjust as needed */
   overflow-y: auto; /* Adds scroll */
   margin: 20px auto;
-  border-radius: 30px; // 50% Makes the shape a circle
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   position: fixed; /* Fixed position to prevent layout shift */
   bottom: 10px; /* Positioned at the bottom of the screen */

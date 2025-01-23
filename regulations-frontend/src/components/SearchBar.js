@@ -7,7 +7,7 @@ const SearchContainer = styled.div`
   display: flex;
   align-items: center;
   position: relative;
-  width: 100%;
+  width: 40%;
 `;
 
 const SearchInput = styled.input`
@@ -15,7 +15,7 @@ const SearchInput = styled.input`
   border: 1px solid #ccc;
   color: #a9a9a9;
   border-radius: 25px; /* Match the buttons */
-  width: 100%;
+  width: 80%;
   transition: all 0.3s ease; /* Smooth hover transition */
   font-size: 16px; /* Improve text readability */
 

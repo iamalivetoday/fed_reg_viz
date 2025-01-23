@@ -9,7 +9,7 @@ const FooterContainer = styled.footer`
   text-align: right;
   display: right;
   align-items: vertical;
-  position: ${(props) => (props.fixed ? 'fixed' : 'relative')};
+  position: fixed;
   left: 0;
   font-size: 10px;
   bottom: 0;
@@ -34,9 +34,9 @@ const MadeleineLink = styled.a`
   }
 `;
 
-const Footer = ({ fixed = false }) => {
+const Footer = () => {
   return (
-    <FooterContainer fixed={fixed}>
+    <FooterContainer>
       <div>
       </div>
       <MadeleineDiv>

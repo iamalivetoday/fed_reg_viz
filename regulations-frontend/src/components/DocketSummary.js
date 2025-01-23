@@ -4,11 +4,8 @@ import styled from 'styled-components'; // Import styled-components
 
 const SummaryContainer = styled.div`
   width: 78%;
-  background-color: #f1f1f1; /* Light gray fill */
-  border: 2px solid #333;
-  border-radius: 15px; /* Rounded borders */
+  border: 1px solid #333;
   padding: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   margin: 20px auto; /* Adjusted margin for alignment */
   word-wrap: break-word;
 `;

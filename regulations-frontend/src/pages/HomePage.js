@@ -12,15 +12,13 @@ const HomePageContainer = styled.div`
   justify-content: start;
   height: 95vh;
   width: 100%;
-  overflow: hidden;
   background-color: white;
   position: relative;
   padding: 20px;
 `;
 
 const HorizontalText = styled.div`
-  font-size: 2rem;
-  font-weight: bold;
+  font-size: 4rem;
   text-align: left;
   color: #0A3161;
   display: flex;
@@ -32,6 +30,7 @@ const HorizontalText = styled.div`
 
 const TypewriterWrapper = styled.span`
   margin-left: 4px;
+  padding-left: 8px;
   cursor: pointer;
   
 `;
@@ -111,7 +110,7 @@ const HomePage = () => {
   const typewriterStrings = [
     "we", "the people", "you", "ordinary people", "strangers", "Americans", "students",
     "our unions", "you", "families", "working people", "veterans", "your friends",
-    "our neighbors", "ordinary Americans", "other families"
+    "our neighbors", "other families"
   ];
   const [hovered, setHovered] = useState(false);
 
