@@ -14,81 +14,126 @@ API_KEY = "YauEoriccK04skfmgd1wTAuHeXQ4dy48dzck8Wi4"
 app = Flask(__name__)
 CORS(app, supports_credentials=True, logging=True)
 
-@app.route('/api/analyze_sentiment', methods=['POST'])
-def analyze_comments_sentiment():
+@app.route('/api/comments_with_sentiment/<docket_id>', methods=['GET'])
+async def comments_with_sentiment(docket_id):
     """
-    Receives a list of comment objects in JSON:
-    {
-      "comments": [
-        { "id": "...", "name": "...", "text": "...", ...},
-        ...
-      ]
-    }
-
-    For each comment, call Google NLP to get sentiment score,
-    map score -> label/color, then return results.
+    Fetch comments for the given docket_id from regulations.gov,
+    then run each comment's text through Google NLP for sentiment.
+    Return an array of comments with sentiment fields.
     """
+    headers = {"X-Api-Key": API_KEY}
+    page = request.args.get('page', 1, type=int)
+    limit = request.args.get('limit', 20, type=int)
 
-    data = request.get_json()
-    if not data or "comments" not in data:
-        return jsonify({"error": "No 'comments' field found in JSON."}), 400
+    documents_url = f"{API_BASE_URL}documents?filter[docketId]={docket_id}&page[size]={limit}&page[number]={page}&api_key={API_KEY}"
 
-    # Prepare the Google NLP client and settings
+    async with httpx.AsyncClient() as client:
+        # 1) Fetch documents
+        documents_response = await client.get(documents_url, headers=headers)
+        if documents_response.status_code != 200:
+            return jsonify({
+                "error": f"Failed to retrieve documents. Status: {documents_response.status_code}"
+            }), documents_response.status_code
+
+        documents_data = documents_response.json()
+        object_ids = [
+            doc['attributes']['objectId']
+            for doc in documents_data['data']
+            if 'attributes' in doc and 'objectId' in doc['attributes']
+        ]
+
+        # 2) For each document, fetch top-level comments
+        async def fetch_comments(object_id):
+            comments_url = f"{API_BASE_URL}comments?filter[commentOnId]={object_id}&page[size]={limit}&page[number]={page}&api_key={API_KEY}"
+            resp = await client.get(comments_url, headers=headers)
+            if resp.status_code == 200:
+                return resp.json().get('data', [])
+            return []
+
+        comments_responses = await asyncio.gather(*[fetch_comments(obj_id) for obj_id in object_ids])
+        all_comments = [comment for c_list in comments_responses for comment in c_list]
+
+        # 3) For each comment, fetch the *detailed* text
+        async def fetch_comment_details(comment):
+            comment_id = comment['id']
+            comment_url = f"{API_BASE_URL}comments/{comment_id}?api_key={API_KEY}"
+
+            async with httpx.AsyncClient() as client2:
+                detail_resp = await client2.get(comment_url, headers=headers)
+                if detail_resp.status_code == 200:
+                    detail_data = detail_resp.json()
+                    comment_text = detail_data.get("data", {}).get("attributes", {}).get("comment", "")
+                    name = comment.get("attributes", {}).get("title", "Anonymous")
+                    
+                    # Once we have the comment_text, analyze sentiment
+                    return analyze_comment_sentiment(
+                        comment_id, name, comment_text
+                    )
+                return None
+
+        # gather full comment details (with sentiment) asynchronously
+        comment_details = await asyncio.gather(
+            *[fetch_comment_details(c) for c in all_comments]
+        )
+        comments_list = [c for c in comment_details if c is not None]
+
+    return jsonify(comments_list)
+
+
+def analyze_comment_sentiment(comment_id, name, text):
+    """
+    Calls Google NLP on a single comment's text.
+    Returns a dict with id, name, text, and sentiment fields.
+    """
     client = language_v2.LanguageServiceClient()
     encoding_type = language_v2.EncodingType.UTF8
 
-    comments = data["comments"]
-    analyzed_results = []
+    document = {
+        "content": text,
+        "type_": language_v2.Document.Type.PLAIN_TEXT,
+        "language_code": "en"
+    }
+    label, color, score = "neutral", "#FFFF00", 0.0
+    try:
+        response = client.analyze_sentiment(
+            request={"document": document, "encoding_type": encoding_type}
+        )
+        score = response.document_sentiment.score
+        label, color = sentiment_label_and_color(score)
+    except (GoogleAPICallError, RetryError) as e:
+        print(f"Google NLP error: {e}")
+        label, color, score = "error", "#808080", 0
 
-    for comment in comments:
-        text = comment.get("text", "")
+    return {
+        "id": comment_id,
+        "name": name,
+        "text": text,
+        "sentiment": label,
+        "score": score,
+        "color": color
+    }
 
-        # Construct the document for Google NLP
-        document = {
-            "content": text,
-            "type_": language_v2.Document.Type.PLAIN_TEXT,
-            "language_code": "en"
-        }
-
-        try:
-            # Actually call analyze_sentiment on this text
-            response = client.analyze_sentiment(
-                request={"document": document, "encoding_type": encoding_type}
-            )
-            
-            # score is between -1.0 (negative) and 1.0 (positive)
-            score = response.document_sentiment.score
-            label, color = sentiment_label_and_color(score)
-
-        except (GoogleAPICallError, RetryError) as e:
-            print(f"Google NLP error: {e}")
-            label, color, score = "error", "#808080", 0
-
-        analyzed_results.append({
-            "id": comment.get("id", ""),
-            "name": comment.get("name", "Anonymous"),
-            "text": text,
-            "sentiment": label,
-            "score": score,
-            "color": color
-        })
-
-    return jsonify(analyzed_results)
 
 def sentiment_label_and_color(score: float):
     """
-    Convert a sentiment score (-1 to 1) into a label and a color.
+    Convert a sentiment score (-1 to 1) into a label and a gradient color.
     """
+    # Determine label
     if score < -0.2:
-        # Negative
-        return "negative", "#FF0000"  # Red
+        label = "negative"
     elif score > 0.2:
-        # Positive
-        return "positive", "#00FF00"  # Green
+        label = "positive"
     else:
-        # Neutral
-        return "neutral", "#FFFF00"   # Yellow
-
+        label = "neutral"
+    
+    # Map score to a gradient color
+    red = int((1 - score) * 255) if score <= 0 else int((1 - abs(score)) * 255)
+    green = int((1 + score) * 255) if score >= 0 else int((1 - abs(score)) * 255)
+    blue = 0  # Optional: keep blue constant to stick with red-green gradient
+    
+    color = f"#{red:02X}{green:02X}{blue:02X}"
+    
+    return label, color
 
 
 @app.route('/api/comments/<docket_id>', methods=['GET'])
