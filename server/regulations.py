@@ -14,76 +14,48 @@ API_KEY = "YauEoriccK04skfmgd1wTAuHeXQ4dy48dzck8Wi4"
 app = Flask(__name__)
 CORS(app, supports_credentials=True, logging=True)
 
-@app.route('/api/comments_no_sentiment/<docket_id>', methods=['GET'])
-async def comments_no_sentiment(docket_id):
+@app.route('/api/comments_with_sentiment/<docket_id>', methods=['GET'])
+def comments_with_sentiment(docket_id):
     """
-    1) Fetch the comments from regulations.gov
-    2) Return them *without* sentiment analysis
+    1) Fetch comments for the given docket
+    2) For each comment, call Google NLP
+    3) Return comments + sentiment
     """
 
-    headers = {"X-Api-Key": API_KEY}
-    page = request.args.get('page', 1, type=int)
-    limit = request.args.get('limit', 20, type=int)
-    documents_url = f"{API_BASE_URL}documents?filter[docketId]={docket_id}&page[size]={limit}&page[number]={page}&api_key={API_KEY}"
+    # 1. Fetch the raw comments (synchronously in this example)
+    #    (You could do it similarly to comments_no_sentiment or /api/comments)
+    #    For brevity, let's assume you convert your code to sync or wrap it properly.
 
-    async with httpx.AsyncClient() as client:
-        # 1) Get the documents
-        documents_response = await client.get(documents_url, headers=headers)
-        if documents_response.status_code != 200:
-            return jsonify({
-                "error": f"Failed to retrieve documents. Status: {documents_response.status_code}"
-            }), documents_response.status_code
+    comments_list = comments(docket_id)  # hypothetical function
 
-        documents_data = documents_response.json()
-        object_ids = [
-            doc['attributes']['objectId']
-            for doc in documents_data['data']
-            if 'attributes' in doc and 'objectId' in doc['attributes']
-        ]
+    # 2. Analyze sentiment for each comment
+    client = language_v2.LanguageServiceClient()
+    encoding_type = language_v2.EncodingType.UTF8
 
-        # 2) For each document, fetch the top-level 'comments' references
-        async def fetch_comments(object_id):
-            comments_url = f"{API_BASE_URL}comments?filter[commentOnId]={object_id}&page[size]={limit}&page[number]={page}&api_key={API_KEY}"
-            resp = await client.get(comments_url, headers=headers)
-            if resp.status_code == 200:
-                return resp.json().get('data', [])
-            return []
+    for comment in comments_list:
+        text = comment.get("text", "")
+        document = {
+            "content": text,
+            "type_": language_v2.Document.Type.PLAIN_TEXT,
+            "language_code": "en",
+        }
+        try:
+            response = client.analyze_sentiment(
+                request={"document": document, "encoding_type": encoding_type}
+            )
+            score = response.document_sentiment.score
+            label, color = sentiment_label_and_color(score)
+            comment["sentiment"] = label
+            comment["score"] = score
+            comment["color"] = color
+        except Exception as e:
+            # If there's an error, handle gracefully
+            comment["sentiment"] = "error"
+            comment["score"] = 0
+            comment["color"] = "#808080"
 
-        # gather all comment references
-        comments_responses = await asyncio.gather(*[fetch_comments(obj_id) for obj_id in object_ids])
-        all_comments = [comment for c_list in comments_responses for comment in c_list]
-
-        # 3) For each comment, fetch the *detailed* text
-        async def fetch_comment_details(comment):
-            comment_id = comment['id']
-            comment_url = f"{API_BASE_URL}comments/{comment_id}?api_key={API_KEY}"
-
-            async with httpx.AsyncClient() as client2:
-                detail_resp = await client2.get(comment_url, headers=headers)
-                if detail_resp.status_code == 200:
-                    detail_data = detail_resp.json()
-                    comment_text = detail_data.get("data", {}).get("attributes", {}).get("comment", "")
-                    name = comment.get("attributes", {}).get("title", "Anonymous")
-
-                    return {
-                        "id": comment_id,
-                        "name": name,
-                        "text": comment_text
-                    }
-                return None
-
-        comment_details = await asyncio.gather(
-            *[fetch_comment_details(c) for c in all_comments]
-        )
-        comments_list = [c for c in comment_details if c is not None]
-
-    # Return comments WITHOUT sentiment
     return jsonify(comments_list)
 
-""" 
-ok what's the problem? the problem is that the comments data structure has all these different fields
-and i just want to do sentiment analysis on each of the comments text. 
-"""
 
 @app.route('/api/analyze_sentiment', methods=['POST'])
 def analyze_comments_sentiment():
@@ -160,22 +132,6 @@ def sentiment_label_and_color(score: float):
         # Neutral
         return "neutral", "#FFFF00"   # Yellow
 
-
-@app.route('/api/docket_abstract/<docket_id>', methods=['GET'])
-async def docket_abstract(docket_id):
-    headers = {"X-Api-Key": API_KEY}
-    async with httpx.AsyncClient() as client:
-        response = await client.get(f"{API_BASE_URL}dockets/{docket_id}", headers=headers)
-    if response.status_code == 200:
-        docket_data = response.json()
-        dk_abstract = docket_data.get("data", {}).get("attributes", {}).get("dkAbstract", "Abstract not found.")
-        return jsonify({"abstract": dk_abstract})
-    else:
-        return jsonify({"error": "Failed to retrieve docket"}), response.status_code
-
-@app.route('/')
-async def home():
-    return 'Welcome Madeleine'
 
 
 @app.route('/api/comments/<docket_id>', methods=['GET'])
@@ -278,6 +234,21 @@ def search_term(term):
         return jsonify({"error": f"An error occurred: {str(e)}"}), 500
 
 
+@app.route('/api/docket_abstract/<docket_id>', methods=['GET'])
+async def docket_abstract(docket_id):
+    headers = {"X-Api-Key": API_KEY}
+    async with httpx.AsyncClient() as client:
+        response = await client.get(f"{API_BASE_URL}dockets/{docket_id}", headers=headers)
+    if response.status_code == 200:
+        docket_data = response.json()
+        dk_abstract = docket_data.get("data", {}).get("attributes", {}).get("dkAbstract", "Abstract not found.")
+        return jsonify({"abstract": dk_abstract})
+    else:
+        return jsonify({"error": "Failed to retrieve docket"}), response.status_code
+
+@app.route('/')
+async def home():
+    return 'Welcome Madeleine'
 
 if __name__ == '__main__':
     import asyncio
