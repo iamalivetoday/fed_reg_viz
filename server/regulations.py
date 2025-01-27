@@ -14,49 +14,6 @@ API_KEY = "YauEoriccK04skfmgd1wTAuHeXQ4dy48dzck8Wi4"
 app = Flask(__name__)
 CORS(app, supports_credentials=True, logging=True)
 
-@app.route('/api/comments_with_sentiment/<docket_id>', methods=['GET'])
-def comments_with_sentiment(docket_id):
-    """
-    1) Fetch comments for the given docket
-    2) For each comment, call Google NLP
-    3) Return comments + sentiment
-    """
-
-    # 1. Fetch the raw comments (synchronously in this example)
-    #    (You could do it similarly to comments_no_sentiment or /api/comments)
-    #    For brevity, let's assume you convert your code to sync or wrap it properly.
-
-    comments_list = comments(docket_id)  # hypothetical function
-
-    # 2. Analyze sentiment for each comment
-    client = language_v2.LanguageServiceClient()
-    encoding_type = language_v2.EncodingType.UTF8
-
-    for comment in comments_list:
-        text = comment.get("text", "")
-        document = {
-            "content": text,
-            "type_": language_v2.Document.Type.PLAIN_TEXT,
-            "language_code": "en",
-        }
-        try:
-            response = client.analyze_sentiment(
-                request={"document": document, "encoding_type": encoding_type}
-            )
-            score = response.document_sentiment.score
-            label, color = sentiment_label_and_color(score)
-            comment["sentiment"] = label
-            comment["score"] = score
-            comment["color"] = color
-        except Exception as e:
-            # If there's an error, handle gracefully
-            comment["sentiment"] = "error"
-            comment["score"] = 0
-            comment["color"] = "#808080"
-
-    return jsonify(comments_list)
-
-
 @app.route('/api/analyze_sentiment', methods=['POST'])
 def analyze_comments_sentiment():
     """
