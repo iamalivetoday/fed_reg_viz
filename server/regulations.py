@@ -3,6 +3,9 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 import requests
 import asyncio
+from openai import OpenAI
+
+client = OpenAI(api_key="<sk-aba27ddc8fb042509bbc8df58496aaaa>", base_url="https://api.deepseek.com")
 
 # API Key and Base URL setup
 API_BASE_URL = "https://api.regulations.gov/v4/"
@@ -63,18 +66,28 @@ async def comments(docket_id):
         async def fetch_comment_details(comment):
             comment_id = comment['id']
             comment_detail_url = f"{API_BASE_URL}comments/{comment_id}?api_key={API_KEY}"
-            response = await client.get(comment_detail_url, headers=headers)
-            if response.status_code == 200:
-                comment_data = response.json()
-                comment_text = comment_data.get("data", {}).get("attributes", {}).get("comment", "")
-                name = comment.get("attributes", {}).get("title", "Anonymous")
-                return {
-                    "id": comment_id,
-                    "name": name,
-                    "color": '#647c00',
-                    "text": comment_text
-                }
-            return None
+
+            async with httpx.AsyncClient() as client:
+                response = await client.get(comment_detail_url, headers=headers)
+                if response.status_code == 200:
+                    comment_data = response.json()
+                    comment_text = comment_data.get("data", {}).get("attributes", {}).get("comment", "")
+                    name = comment.get("attributes", {}).get("title", "Anonymous")
+
+                    # 1) Get sentiment from DeepSeek
+                    sentiment_label = await get_sentiment_from_deepseek(comment_text)
+
+                    # 2) Map sentiment to color
+                    sentiment_color = sentiment_to_color(sentiment_label)
+
+                    return {
+                        "id": comment_id,
+                        "name": name,
+                        "text": comment_text,
+                        "sentiment": sentiment_label,    # e.g. "positive", "negative", etc.
+                        "color": sentiment_color         # e.g. "#FF0000", "#00FF00", etc.
+                    }
+                return None
 
         comment_details = await asyncio.gather(*[fetch_comment_details(comment) for comment in all_comments])
 
@@ -125,6 +138,53 @@ def search_term(term):
         return jsonify({"error": "Request timed out"}), 504
     except requests.exceptions.RequestException as e:
         return jsonify({"error": f"An error occurred: {str(e)}"}), 500
+
+
+async def get_sentiment_from_deepseek(text: str) -> str:
+    """
+    Sends the text to DeepSeek's sentiment endpoint and returns
+    a sentiment label (e.g. 'positive', 'neutral', 'negative', etc.)
+    """
+    if not text.strip():
+        return "neutral"  # Or handle empty text differently
+
+    headers = {
+        "Authorization": f"Bearer {sk-aba27ddc8fb042509bbc8df58496aaaa}",
+        "Content-Type": "application/json"
+    }
+    payload = {
+        "text": text
+    }
+
+    async with httpx.AsyncClient() as client:
+        try:
+            response = await client.post(https://api.deepseek.com, json=payload, headers=headers)
+            response.raise_for_status()
+            data = response.json()
+            # Depending on how DeepSeek returns the sentiment:
+            # e.g. {"sentiment": "positive", "confidence": 0.95} 
+            return data.get("sentiment", "neutral")
+        except httpx.HTTPError as e:
+            print("DeepSeek API error:", e)
+            return "error"
+        
+def sentiment_to_color(sentiment: str) -> str:
+    """
+    Maps sentiment labels to a hex color. 
+    - Negative -> Red
+    - Neutral  -> Yellow
+    - Positive -> Green
+    - Error/Unknown -> Gray
+    """
+    sentiment = sentiment.lower()
+    if sentiment == "negative":
+        return "#FF0000"  # Red
+    elif sentiment == "positive":
+        return "#00FF00"  # Green
+    elif sentiment == "neutral":
+        return "#FFFF00"  # Yellow
+    else:
+        return "#808080"  # Gray for 'error' or unknown
 
 
 if __name__ == '__main__':
