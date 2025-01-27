@@ -49,7 +49,7 @@ const AllComments = ({ comments, setActiveComment, activeComment, bgColor, isLoa
               return (
                 <Comment
                   key={comment.id}
-                  color={comment.color}
+                  thecolor={comment.color}
                   isActive={activeComment && activeComment.id === comment.id}
                   onClick={() => setActiveComment(comment)}
                   style={{

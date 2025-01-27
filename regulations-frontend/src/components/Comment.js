@@ -17,8 +17,8 @@ const CommentBox = styled.div`
 `;
 
 const Comment = ({ thecolor, onClick, isActive }) => {
-  //console.log(color)
-  
+  console.log(`CommentBox Color: ${thecolor}`);
+
   return (
     <CommentBox
       color={thecolor} // Pass the dynamic color as bgColor
