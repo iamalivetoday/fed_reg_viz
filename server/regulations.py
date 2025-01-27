@@ -80,24 +80,57 @@ async def comments_no_sentiment(docket_id):
     # Return comments WITHOUT sentiment
     return jsonify(comments_list)
 
+""" 
+ok what's the problem? the problem is that the comments data structure has all these different fields
+and i just want to do sentiment analysis on each of the comments text. 
+"""
+
 @app.route('/api/analyze_sentiment', methods=['POST'])
 def analyze_comments_sentiment():
     """
-    Receives a list of comment objects or strings in JSON
-    and returns them with sentiment labels/colors.
+    Receives a list of comment objects in JSON:
+    {
+      "comments": [
+        { "id": "...", "name": "...", "text": "...", ...},
+        ...
+      ]
+    }
+
+    For each comment, call Google NLP to get sentiment score,
+    map score -> label/color, then return results.
     """
+
     data = request.get_json()
     if not data or "comments" not in data:
         return jsonify({"error": "No 'comments' field found in JSON."}), 400
+
+    # Prepare the Google NLP client and settings
+    client = language_v2.LanguageServiceClient()
+    encoding_type = language_v2.EncodingType.UTF8
 
     comments = data["comments"]
     analyzed_results = []
 
     for comment in comments:
         text = comment.get("text", "")
+
+        # Construct the document for Google NLP
+        document = {
+            "content": text,
+            "type_": language_v2.Document.Type.PLAIN_TEXT,
+            "language_code": "en"
+        }
+
         try:
-            score = analyze_sentiment(text)
+            # Actually call analyze_sentiment on this text
+            response = client.analyze_sentiment(
+                request={"document": document, "encoding_type": encoding_type}
+            )
+            
+            # score is between -1.0 (negative) and 1.0 (positive)
+            score = response.document_sentiment.score
             label, color = sentiment_label_and_color(score)
+
         except (GoogleAPICallError, RetryError) as e:
             print(f"Google NLP error: {e}")
             label, color, score = "error", "#808080", 0
@@ -112,29 +145,6 @@ def analyze_comments_sentiment():
         })
 
     return jsonify(analyzed_results)
-
-def analyze_sentiment(text_content: str) -> float:
-    """
-    Returns a sentiment score between -1.0 (very negative) and +1.0 (very positive).
-    Uses the Google Cloud Natural Language API.
-    """
-    # Initialize the Google Cloud Natural Language client
-    client = language_v2.LanguageServiceClient()
-
-    # Construct document
-    document = {
-        "content": text_content,
-        "type_": language_v2.Document.Type.PLAIN_TEXT,
-        "language_code": "en"
-    }
-
-    response = client.analyze_sentiment(
-        request={"document": document, "encoding_type": language_v2.EncodingType.UTF8}
-    )
-
-    # The sentiment score is in response.document_sentiment.score
-    # Range: -1.0 (negative) to 1.0 (positive)
-    return response.document_sentiment.score
 
 def sentiment_label_and_color(score: float):
     """
@@ -207,16 +217,9 @@ async def comments(docket_id):
                     comment_data = resp.json()
                     comment_text = comment_data.get("data", {}).get("attributes", {}).get("comment", "")
                     name = comment.get("attributes", {}).get("title", "Anonymous")
-
-                    # Synchronous sentiment call inside an async function
-                    # (Blocks the event loop but simplest example)
-                    try:
-                        score = analyze_sentiment(comment_text)
-                        label, color = sentiment_label_and_color(score)
-                    except (GoogleAPICallError, RetryError) as e:
-                        print(f"Google NLP error: {e}")
-                        label, color = "error", "#808080"
-
+                    score = 0
+                    label = "neutral"
+                    color = "#FFFFFF"
                     return {
                         "id": comment_id,
                         "name": name,
