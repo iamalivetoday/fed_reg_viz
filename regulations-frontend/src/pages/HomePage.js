@@ -180,6 +180,7 @@ const HomePage = () => {
 
   return (
     <HomePageContainer>
+      <br/><br/>
       <HorizontalText>
         what do
         <TypewriterWrapper
@@ -206,13 +207,14 @@ const HomePage = () => {
         <LeftContainer> 
           <SearchBar/>
         </LeftContainer>
+        <br/><br/>
+      </Navbar>
 
         {/* Right side with buttons */}
         <RightContainer>
           <NavItem to="/about" activeClassName="active">about</NavItem>
           <NavItem to="/agencies" activeClassName="active">agencies</NavItem>
         </RightContainer>
-      </Navbar>
     </HomePageContainer>
   );
 };

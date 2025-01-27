@@ -14,14 +14,19 @@ const OneDocketPage = () => {
 
   useEffect(() => {
     setIsLoading(true);  // Set loading to true when fetching starts
-    axios.get(`http://127.0.0.1:5000/api/comments/${docketId}`)
+    axios.get(`http://127.0.0.1:5000/api/comments_with_sentiment/${docketId}`)
       .then(response => {
         const fetchedComments = response.data.map(comment => ({
           id: comment.id,
-          color: comment.color, // Setting all comments to green for now
+          color: comment.color, 
           commenter: { firstName: comment.name.split(' ')[0], lastName: comment.name.split(' ')[1] },
           text: comment.text,
         }));
+
+        fetchedComments.forEach(comment => {
+          console.log(`Comment ID: ${comment.id}, Color: ${comment.color}`);
+        });
+        
         setComments(fetchedComments);
         setIsLoading(false);  // Set loading to false when comments are fetched
       })
@@ -65,7 +70,6 @@ const OneDocketPage = () => {
         comments={comments} 
         setActiveComment={handleCommentClick} 
         activeComment={activeComment} 
-        bgColor="#f1f1f1"
         isLoading={isLoading}  // Pass isLoading to AllComments
       />
       {isCommentDisplayOpen && 

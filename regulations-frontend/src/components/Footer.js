@@ -19,6 +19,7 @@ const FooterContainer = styled.footer`
 const MadeleineDiv = styled.div`
   padding-right: 1rem;
   justify-content: right;
+  padding-top: 15px;
 `;
 
 const MadeleineLink = styled.a`

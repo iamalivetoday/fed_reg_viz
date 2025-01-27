@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Comment from './Comment';
 
 const Container = styled.div`
-  width: 80%;
+  width: 92%;
   min-height: 300px; // Adjust this value based on your needs
   margin: 10px auto;
   background-color: white;
@@ -42,19 +42,28 @@ const AllComments = ({ comments, setActiveComment, activeComment, bgColor, isLoa
         <>
           <DefaultMessage>click on any icon to read the associated comment text.</DefaultMessage>
           <CommentsGrid bgColor={bgColor}>
-            {comments.map(comment => (
-              <Comment
-                key={comment.id}
-                color={comment.color}
-                isActive={activeComment && activeComment.id === comment.id}
-                onClick={() => setActiveComment(comment)}
-              />
-            ))}
+            {comments.map(comment => {
+              // Log the color for each comment
+              console.log(`allcomments, ID: ${comment.id}, Color: ${comment.color}`);
+              
+              return (
+                <Comment
+                  key={comment.id}
+                  color={comment.color}
+                  isActive={activeComment && activeComment.id === comment.id}
+                  onClick={() => setActiveComment(comment)}
+                  style={{
+                    backgroundColor: comment.color
+                  }}
+                />
+              );
+            })}
           </CommentsGrid>
         </>
       )}
     </Container>
   );
+  
 };
 
 export default AllComments;

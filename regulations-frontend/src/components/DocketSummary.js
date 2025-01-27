@@ -3,7 +3,7 @@ import axios from 'axios';
 import styled from 'styled-components'; // Import styled-components
 
 const SummaryContainer = styled.div`
-  width: 78%;
+  width: 90%;
   border: 1px solid #333;
   padding: 10px;
   margin: 20px auto; /* Adjusted margin for alignment */
