@@ -20,6 +20,21 @@ API_BASE_URL = "https://api.regulations.gov/v4/"
 app = Flask(__name__)
 CORS(app, supports_credentials=True, logging=True)
 
+@app.route('/api/title/<docket_id>', methods=['GET'])
+async def docket_abstract(docket_id):
+    headers = {"X-Api-Key": apikey}
+    async with httpx.AsyncClient() as client:
+        response = await client.get(f"{API_BASE_URL}dockets/{docket_id}", headers=headers)
+    if response.status_code == 200:
+        docket_data = response.json()
+        dk_title = docket_data.get("data", {}).get("attributes", {}).get("title")
+        dk_shortTitle = docket_data.get("data", {}).get("attributes", {}).get("shortTitle")
+
+        return jsonify({"shortTitle": dk_shortTitle, "title": dk_title})
+    else:
+        return jsonify({"error": "Failed to retrieve title"}), response.status_code
+
+    
 @app.route('/api/comments_with_sentiment/<docket_id>', methods=['GET'])
 async def comments_with_sentiment(docket_id):
     """
