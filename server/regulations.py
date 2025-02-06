@@ -50,7 +50,7 @@ async def comments_with_sentiment(docket_id):
 
         # 2) For each document, fetch top-level comments
         async def fetch_comments(object_id):
-            comments_url = f"{API_BASE_URL}comments?filter[commentOnId]={object_id}&page[size]={limit}&page[number]={page}&api_key={API_KEY}"
+            comments_url = f"{API_BASE_URL}comments?filter[commentOnId]={object_id}&page[size]={limit}&page[number]={page}&api_key={apikey}"
             resp = await client.get(comments_url, headers=headers)
             if resp.status_code == 200:
                 return resp.json().get('data', [])
