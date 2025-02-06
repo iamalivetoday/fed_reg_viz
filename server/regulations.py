@@ -3,13 +3,19 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 import requests
 import asyncio
+from dotenv import load_dotenv
 
 from google.cloud import language_v2
 from google.api_core.exceptions import GoogleAPICallError, RetryError
 
+import os
+
+load_dotenv()  # this loads .env variables into os.environ
+
+apikey = os.getenv("API_KEY")
+
 # API Key and Base URL setup
 API_BASE_URL = "https://api.regulations.gov/v4/"
-API_KEY = "YauEoriccK04skfmgd1wTAuHeXQ4dy48dzck8Wi4"
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True, logging=True)
@@ -21,11 +27,11 @@ async def comments_with_sentiment(docket_id):
     then run each comment's text through Google NLP for sentiment.
     Return an array of comments with sentiment fields.
     """
-    headers = {"X-Api-Key": API_KEY}
+    headers = {"X-Api-Key": apikey}
     page = request.args.get('page', 1, type=int)
     limit = request.args.get('limit', 20, type=int)
 
-    documents_url = f"{API_BASE_URL}documents?filter[docketId]={docket_id}&page[size]={limit}&page[number]={page}&api_key={API_KEY}"
+    documents_url = f"{API_BASE_URL}documents?filter[docketId]={docket_id}&page[size]={limit}&page[number]={page}&api_key={apikey}"
 
     async with httpx.AsyncClient() as client:
         # 1) Fetch documents
@@ -56,7 +62,7 @@ async def comments_with_sentiment(docket_id):
         # 3) For each comment, fetch the *detailed* text
         async def fetch_comment_details(comment):
             comment_id = comment['id']
-            comment_url = f"{API_BASE_URL}comments/{comment_id}?api_key={API_KEY}"
+            comment_url = f"{API_BASE_URL}comments/{comment_id}?api_key={apikey}"
 
             async with httpx.AsyncClient() as client2:
                 detail_resp = await client2.get(comment_url, headers=headers)
@@ -138,10 +144,10 @@ def sentiment_label_and_color(score: float):
 
 @app.route('/api/comments/<docket_id>', methods=['GET'])
 async def comments(docket_id):
-    headers = {"X-Api-Key": API_KEY}
+    headers = {"X-Api-Key": apikey}
     page = request.args.get('page', 1, type=int)
     limit = request.args.get('limit', 20, type=int)
-    documents_url = f"{API_BASE_URL}documents?filter[docketId]={docket_id}&page[size]={limit}&page[number]={page}&api_key={API_KEY}"
+    documents_url = f"{API_BASE_URL}documents?filter[docketId]={docket_id}&page[size]={limit}&page[number]={page}&api_key={apikey}"
 
     async with httpx.AsyncClient() as client:
         documents_response = await client.get(documents_url, headers=headers)
@@ -156,7 +162,7 @@ async def comments(docket_id):
         ]
 
         async def fetch_comments(object_id):
-            comments_url = f"{API_BASE_URL}comments?filter[commentOnId]={object_id}&page[size]={limit}&page[number]={page}&api_key={API_KEY}"
+            comments_url = f"{API_BASE_URL}comments?filter[commentOnId]={object_id}&page[size]={limit}&page[number]={page}&api_key={apikey}"
             response = await client.get(comments_url, headers=headers)
             if response.status_code == 200:
                 return response.json().get('data', [])
@@ -167,7 +173,7 @@ async def comments(docket_id):
 
         async def fetch_comment_details(comment):
             comment_id = comment['id']
-            comment_url = f"{API_BASE_URL}comments/{comment_id}?api_key={API_KEY}"
+            comment_url = f"{API_BASE_URL}comments/{comment_id}?api_key={apikey}"
 
             async with httpx.AsyncClient() as client2:
                 resp = await client2.get(comment_url, headers=headers)
@@ -194,9 +200,9 @@ async def comments(docket_id):
     return jsonify(comments_list)
 
 async def get_dockets_by_agency(agency):
-    headers = {"X-Api-Key": API_KEY}
+    headers = {"X-Api-Key": apikey}
     async with httpx.AsyncClient() as client:
-        dockets_response = await client.get(f"{API_BASE_URL}dockets?sort=-lastModifiedDate&filter[docketType]=Rulemaking&filter[agencyId]={agency}&api_key={API_KEY}", headers=headers)
+        dockets_response = await client.get(f"{API_BASE_URL}dockets?sort=-lastModifiedDate&filter[docketType]=Rulemaking&filter[agencyId]={agency}&api_key={apikey}", headers=headers)
     if dockets_response.status_code == 200:
         return dockets_response.json()
     else:
@@ -220,8 +226,8 @@ def search_term(term):
     if not term:
         return jsonify({"error": "Search term is required"}), 400
 
-    headers = {"X-Api-Key": API_KEY}
-    search_url = f"{API_BASE_URL}documents?filter[searchTerm]={term}&api_key={API_KEY}"
+    headers = {"X-Api-Key": apikey}
+    search_url = f"{API_BASE_URL}documents?filter[searchTerm]={term}&api_key={apikey}"
 
     try:
         response = requests.get(search_url, headers=headers, timeout=10)  # Set a timeout to avoid hanging
@@ -238,7 +244,7 @@ def search_term(term):
 
 @app.route('/api/docket_abstract/<docket_id>', methods=['GET'])
 async def docket_abstract(docket_id):
-    headers = {"X-Api-Key": API_KEY}
+    headers = {"X-Api-Key": apikey}
     async with httpx.AsyncClient() as client:
         response = await client.get(f"{API_BASE_URL}dockets/{docket_id}", headers=headers)
     if response.status_code == 200:
