@@ -95,7 +95,7 @@ const AgenciesPage = () => {
   return (
     <AgenciesPageContainer>
       <Header>
-        <Title>some of our beautiful federal agencies</Title>
+        <Title>some of our beloved federal agencies</Title>
       </Header>
       <AgencyTable>
         <tbody>

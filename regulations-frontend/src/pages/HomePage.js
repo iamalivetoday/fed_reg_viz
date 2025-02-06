@@ -81,31 +81,6 @@ const NavItem = styled(NavLink)`
   
 `;
 
-const TableContainer = styled.table`
-  width: 90%;
-  border-collapse: collapse;
-
-  th, td {
-    text-align: left;
-    border: none;
-    padding-top: 8px;
-  }
-
-  a {
-    text-decoration: none;
-    color: #0A3161;
-
-    &:hover {
-      font-style: italic;
-    }
-  }
-
-  img {
-    width: 50px;
-    height: auto;
-  }
-`;
-
 const HomePage = () => {
   const typewriterStrings = [
     "we", "the people", "you", "ordinary people", "strangers", "Americans", "students",

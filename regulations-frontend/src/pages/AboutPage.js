@@ -35,12 +35,12 @@ const TabContainer = styled.div`
 `;
 
 const TabButton = styled.button`
-  padding: 10px 20px;
+  padding: 10px 16px;
   cursor: pointer;
-  background-color: ${(props) => (props.active ? '#007BFF' : '#f1f1f1')};
+  background-color: ${(props) => (props.active ? '#0A3161' : '#f1f1f1')};
   color: ${(props) => (props.active ? '#fff' : '#000')};
   border: none;
-  border-bottom: ${(props) => (props.active ? '2px solid #007BFF' : '2px solid #ccc')};
+  border-bottom: ${(props) => (props.active ? '2px solid #0A3161' : '2px solid #ccc')};
   outline: none;
   font-size: 1em;
   margin-bottom: 5px;
@@ -84,6 +84,7 @@ const AboutPage = () => {
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
+  
 
   return (
     <AboutPageContainer>
@@ -92,31 +93,29 @@ const AboutPage = () => {
         <AboutBody>
           {activeTab === 'simple' && (
             <p>
-              <HighlightText tooltip="Laws created by agencies without Congress approval.">Regulations</HighlightText> are issued by agencies. Agencies propose regulations and ask the public for their opinions. Based on feedback, they decide whether to proceed, modify, or withdraw the regulation.
+              Federal regulations are laws created by federal agencies. <br/><br/>Agencies propose regulations and ask the public for their opinions. Based on feedback, they decide whether to proceed, modify, or withdraw the regulation.
             </p>
           )}
           {activeTab === 'advanced' && (
             <div>
               <p>
-                <a href="https://www.regulations.gov">regulations.gov</a> is a federal website intended to make it easier for the public to participate and impact Federal rules and regulations.
+                <a href="https://www.regulations.gov">Regulations.gov</a> is a federal website intended to make it easier for the public to participate and impact Federal rules and regulations.
                 <br /><br />
-                This website is not an official website of the US government, but it uses the regulations.gov API 
-                to help make that website easier to navigate.
-              </p>
-              <p>
-                <HighlightText tooltip="Official rules that have the force of law but aren't created by Congress.">Regulations</HighlightText> are official rules that have the force of law but are not created by Congress. They are proposed by government agencies, which solicit public feedback before deciding on the final form of the regulation. This process is known as rulemaking.
-                <br /><br />
-                Examples of proposed regulations include AI policies, noncompete clauses, and various health and safety measures. It's important for the public to participate in this process to ensure that regulations are fair and effective.
+                Until 2003, if you wanted to comment on a proposed rule or regulation, you needed to know the sponsoring agency and when the proposed rule or regulation would be published. You then had to visit to the agency’s physical location and review the documentation in a reading room, and then adhere to the comment process specific to each agency. <br/>
+                <br/> 
+                <a href="https://www.regulations.gov">Regulations.gov</a>, launched in January 2003, removed some of the logistical barriers that made it difficult for a citizen to participate in the complex regulatory process. The website made it possible for people to comment and review Federal rules and regulations.
+                <br/><br/>
+                <i><HighlightText tooltip="americanpublic.space">This</HighlightText></i> website is not an official website of the US government, but it uses the regulations.gov API to display the information on <i><HighlightText tooltip="regulations.gov">that</HighlightText></i> website more clearly.
               </p>
             </div>
           )}
         </AboutBody>
         <TabContainer>
           <TabButton active={activeTab === 'simple'} onClick={() => handleTabClick('simple')}>
-            Simple Explanation
+            less
           </TabButton>
           <TabButton active={activeTab === 'advanced'} onClick={() => handleTabClick('advanced')}>
-            Advanced Explanation
+            more
           </TabButton>
         </TabContainer>
       </ContentContainer>
