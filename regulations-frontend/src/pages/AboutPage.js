@@ -99,13 +99,11 @@ const AboutPage = () => {
           {activeTab === 'advanced' && (
             <div>
               <p>
-                <a href="https://www.regulations.gov">Regulations.gov</a> is a federal website intended to make it easier for the public to participate and impact Federal rules and regulations.
-                <br /><br />
                 Until 2003, if you wanted to comment on a proposed rule or regulation, you needed to know the sponsoring agency and when the proposed rule or regulation would be published. You then had to visit to the agency’s physical location and review the documentation in a reading room, and then adhere to the comment process specific to each agency. <br/>
                 <br/> 
                 <a href="https://www.regulations.gov">Regulations.gov</a>, launched in January 2003, removed some of the logistical barriers that made it difficult for a citizen to participate in the complex regulatory process. The website made it possible for people to comment and review Federal rules and regulations.
                 <br/><br/>
-                <i><HighlightText tooltip="americanpublic.space">This</HighlightText></i> website is not an official website of the US government, but it uses the regulations.gov API to display the information on <i><HighlightText tooltip="regulations.gov">that</HighlightText></i> website more clearly.
+                <i><HighlightText tooltip="americanpublic.space">This</HighlightText></i> website is not an official website of the US government. It's simply intended to display the information on <i><HighlightText tooltip="regulations.gov">that</HighlightText></i> website more clearly.
               </p>
             </div>
           )}

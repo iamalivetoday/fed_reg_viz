@@ -19,7 +19,7 @@ const NavLink = styled(Link)`
   transition: background-color 0.3s;
 
   &:nth-child(2) {
-    margin-right: 100px; /* Adds extra space after the second link */
+    margin-right: 8px; /* Adds extra space after the second link */
   }
 `;
 
