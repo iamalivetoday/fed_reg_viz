@@ -29,7 +29,7 @@ const SmallText = styled.p`
 
 function DocketSummary({ docketId }) {
   const [summary, setSummary] = useState('');
-  const [docket, setDocket] = useState(null);
+
 
   useEffect(() => {
     if (!docketId || docketId === '<docket_id>') {
@@ -51,32 +51,34 @@ function DocketSummary({ docketId }) {
       });
   }, [docketId]);
 
+  const [docketTitle, setDocketTitle] = useState('');
+  const [docketAgency, setDocketAgency] = useState('');
+  
   useEffect(() => {
-    if (!docketId || docketId === '<docket_id>') {
-      console.error('Invalid or missing docketId prop:', docketId);
-      return;
-    }
-
     const fetchDocketTitle = async () => {
       try {
         const response = await fetch(`/api/title/${docketId}`);
-        const data = await response.json();
-
+        const data = await response.json(); // ✅ correct way to extract json
+  
         if (response.ok) {
-          setDocket(data);
-        } 
-      } catch (err) { // changed 'error' to 'err'
-        console.error('Oh nooo!', err);
+          setDocketTitle(data.title || "Title not found");
+          setDocketAgency(data.agency || "Agency not found");
+        } else {
+          console.error("Failed to fetch docket title:", data.error);
+        }
+      } catch (err) {
+        console.error("Oh nooo!", err);
       }
     };
-
-    fetchDocketTitle();
+  
+    if (docketId) fetchDocketTitle();
   }, [docketId]);
+  
 
   return (
     <SummaryContainer>
-      <Subheading>{docket?.shortTitle || 'No Short Title'}</Subheading>
-      <Text>{docket?.title || 'No Title'}</Text>
+      <Subheading>{docketTitle || 'No  Title'}</Subheading>
+      <Text>{docketAgency || 'No agency'}</Text>
       <SmallText>Docket ID: {docketId}</SmallText>
       <p>{summary === null ? 'No abstract found' : summary || 'Loading docket summary...'}</p>
     </SummaryContainer>
