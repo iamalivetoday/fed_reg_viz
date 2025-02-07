@@ -3,17 +3,11 @@ import styled from 'styled-components';
 import Comment from './Comment';
 
 const Container = styled.div`
-  width: 92%;
-  min-height: 300px; // Adjust this value based on your needs
-  margin: 10px auto;
-  background-color: white;
+  width: 93%;
   border: 1px solid #333;
-  padding: 10px 20px;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box; // Ensures padding does not add to the width
-  max-height: 500px; /* Adjust as needed */
-  overflow-y: auto;
+  padding: 10px;
+  margin: 20px auto;
+  word-wrap: break-word;
 `;
 
 const CommentsGrid = styled.div`

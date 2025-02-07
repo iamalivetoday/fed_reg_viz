@@ -3,7 +3,7 @@ import axios from 'axios';
 import styled from 'styled-components';
 
 const SummaryContainer = styled.div`
-  width: 90%;
+  width: 93%;
   border: 1px solid #333;
   padding: 10px;
   margin: 20px auto;
@@ -29,7 +29,8 @@ const SmallText = styled.p`
 
 function DocketSummary({ docketId }) {
   const [summary, setSummary] = useState('');
-
+  const [docketTitle, setDocketTitle] = useState('');
+  const [docketAgency, setDocketAgency] = useState('');
 
   useEffect(() => {
     if (!docketId || docketId === '<docket_id>') {
@@ -39,46 +40,43 @@ function DocketSummary({ docketId }) {
 
     axios.get(`http://127.0.0.1:5000/api/docket_abstract/${docketId}`)
       .then(response => {
-        const abstract = response.data.abstract;
+        const abstract = response.data.abstract || '';
         const cleanedAbstract = abstract.replace(
           'To see the Request for Information and submit a comment, please click on “Browse Documents.”', 
           ''
         );
         setSummary(cleanedAbstract.trim());
       })
-      .catch(err => { // changed 'error' to 'err'
-        console.error('Oh nooo!', err);
+      .catch(err => {
+        console.error('Oh nooo fetching abstract!', err);
       });
   }, [docketId]);
 
-  const [docketTitle, setDocketTitle] = useState('');
-  const [docketAgency, setDocketAgency] = useState('');
-  
   useEffect(() => {
+    if (!docketId || docketId === '<docket_id>') {
+      console.error('Invalid or missing docketId prop:', docketId);
+      return;
+    }
+
     const fetchDocketTitle = async () => {
       try {
-        const response = await fetch(`/api/title/${docketId}`);
-        const data = await response.json(); // ✅ correct way to extract json
-  
-        if (response.ok) {
-          setDocketTitle(data.title || "Title not found");
-          setDocketAgency(data.agency || "Agency not found");
-        } else {
-          console.error("Failed to fetch docket title:", data.error);
-        }
+        console.log(`Fetching title for docketId: ${docketId}`); // ✅ Debugging
+        const response = await axios.get(`http://127.0.0.1:5000/api/title/${docketId}`);
+        console.log('API Response:', response.data); // ✅ Debugging response
+        setDocketTitle(response.data.title || 'Title not found');
+        setDocketAgency(response.data.agency || 'Agency not found');
       } catch (err) {
-        console.error("Oh nooo!", err);
+        console.error('Oh nooo fetching title!', err.response?.data?.error || err.message);
       }
     };
-  
-    if (docketId) fetchDocketTitle();
+
+    fetchDocketTitle();
   }, [docketId]);
-  
 
   return (
     <SummaryContainer>
-      <Subheading>{docketTitle || 'No  Title'}</Subheading>
-      <Text>{docketAgency || 'No agency'}</Text>
+      <Subheading>{docketTitle || 'Loading title...'}</Subheading>
+      <Text>{docketAgency || 'Loading agency...'}</Text>
       <SmallText>Docket ID: {docketId}</SmallText>
       <p>{summary === null ? 'No abstract found' : summary || 'Loading docket summary...'}</p>
     </SummaryContainer>
