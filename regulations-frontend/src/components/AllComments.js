@@ -29,27 +29,25 @@ const LoadingMessage = styled.p`
 
 const AllComments = ({ comments, setActiveComment, activeComment, bgColor, isLoading }) => {
   return (
-    <Container bgColor={bgColor}>
+    <Container>
       {isLoading ? (
         <LoadingMessage>loading comments...</LoadingMessage>
       ) : (
         <>
           <DefaultMessage>click on any icon to read the associated comment text.</DefaultMessage>
-          <CommentsGrid bgColor={bgColor}>
+          <CommentsGrid>
             {comments.map(comment => {
               // Log the color for each comment
               console.log(`allcomments, ID: ${comment.id}, Color: ${comment.color}`);
               
               return (
-                <Comment
-                  key={comment.id}
-                  thecolor={comment.color}
-                  isActive={activeComment && activeComment.id === comment.id}
-                  onClick={() => setActiveComment(comment)}
-                  style={{
-                    backgroundColor: comment.color
-                  }}
-                />
+              <Comment
+                key={comment.id}
+                color={comment.color}  // ✅ this matches styled-components
+                isActive={activeComment && activeComment.id === comment.id}
+                onClick={() => setActiveComment(comment)}
+              />
+
               );
             })}
           </CommentsGrid>

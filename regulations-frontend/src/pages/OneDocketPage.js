@@ -24,6 +24,7 @@ const OneDocketPage = () => {
         }));
 
         fetchedComments.forEach(comment => {
+          console.log(`Commenter: ${comment.commenter.firsName}, lastname: ${comment.commenter.lastName}`);
           console.log(`Comment ID: ${comment.id}, Color: ${comment.color}`);
         });
         

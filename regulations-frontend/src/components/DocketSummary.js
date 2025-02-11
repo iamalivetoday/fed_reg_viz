@@ -171,7 +171,7 @@ function DocketSummary({ docketId }) {
       try {
         console.log(`Fetching title for docketId: ${docketId}`); // ✅ Debugging
         const response = await axios.get(`http://127.0.0.1:5000/api/title/${docketId}`);
-        console.log('API Response:', response.data); // ✅ Debugging response
+        // console.log('API Response:', response.data); // ✅ Debugging response
         setDocketTitle(response.data.title || 'Title not found');
         const agencyId = response.data.agency || 'Unknown Agency';
         const agency = agencyNames.find(entry => entry.acronym === agencyId);
