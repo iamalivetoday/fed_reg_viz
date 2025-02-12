@@ -18,7 +18,7 @@ const CommentCard = ({ commenter, text }) => {
 
   return (
     <Card>
-      <p>{commenter.firstName} {commenter.lastName}</p>
+      <p>{commenter.name}</p>
       <p>{text}</p>
     </Card>
   );

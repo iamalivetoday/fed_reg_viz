@@ -19,14 +19,14 @@ const OneDocketPage = () => {
         const fetchedComments = response.data.map(comment => ({
           id: comment.id,
           color: comment.color, 
-          commenter: { firstName: comment.name.split(' ')[0], lastName: comment.name.split(' ')[1] },
+          commenter: comment.name,
           text: comment.text,
         }));
 
-        fetchedComments.forEach(comment => {
-          console.log(`Commenter: ${comment.commenter.firsName}, lastname: ${comment.commenter.lastName}`);
-          console.log(`Comment ID: ${comment.id}, Color: ${comment.color}`);
-        });
+        //fetchedComments.forEach(comment => {
+          //console.log(`Commenter: ${comment.commenter.firsName}, lastname: ${comment.commenter.lastName}`);
+          //console.log(`Comment ID: ${comment.id}, Color: ${comment.color}`);
+        //});
         
         setComments(fetchedComments);
         setIsLoading(false);  // Set loading to false when comments are fetched

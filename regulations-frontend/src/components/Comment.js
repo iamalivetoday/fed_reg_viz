@@ -4,7 +4,7 @@ import styled from 'styled-components';
 const CommentBox = styled.div`
   width: 100px;
   height: 100px;
-  background-color: ${props => props.color || 'white'}; // fallback to white
+  background-color: ${props => /^#([0-9A-F]{6})$/i.test(props.color) ? props.color : 'white'};
   border: ${props => props.isActive ? '2px solid gold' : '2px solid black'};
   box-shadow: ${props => props.isActive ? '0 0 10px gold' : 'none'};
   border-radius: 40%;
@@ -17,8 +17,8 @@ const CommentBox = styled.div`
 
 
 const Comment = ({ color, onClick, isActive }) => {
-  console.log(`CommentBox Color: ${color}`);
-
+  //console.log(`CommentBox Color: ${color}`);
+  
   return (
     <CommentBox
       color={color} // Pass the dynamic color as bgColor

@@ -27,7 +27,7 @@ const LoadingMessage = styled.p`
   font-size: 1.2em;
 `;
 
-const AllComments = ({ comments, setActiveComment, activeComment, bgColor, isLoading }) => {
+const AllComments = ({ comments, setActiveComment, activeComment, isLoading }) => {
   return (
     <Container>
       {isLoading ? (
@@ -37,17 +37,20 @@ const AllComments = ({ comments, setActiveComment, activeComment, bgColor, isLoa
           <DefaultMessage>click on any icon to read the associated comment text.</DefaultMessage>
           <CommentsGrid>
             {comments.map(comment => {
-              // Log the color for each comment
-              console.log(`allcomments, ID: ${comment.id}, Color: ${comment.color}`);
-              
-              return (
-              <Comment
-                key={comment.id}
-                color={comment.color}  // ✅ this matches styled-components
-                isActive={activeComment && activeComment.id === comment.id}
-                onClick={() => setActiveComment(comment)}
-              />
+              // Ensure color exists and is valid
+              const fixedColor = comment.color && comment.color.length >= 7 
+                ? comment.color.slice(0, 7) 
+                : '#FFFFFF'; // fallback to white
 
+              console.log(`allcomments, ID: ${comment.id}, Fixed Color: ${fixedColor}`);
+
+              return (
+                <Comment
+                  key={comment.id}
+                  color={fixedColor}  // ✅ now passing a valid color
+                  isActive={activeComment && activeComment.id === comment.id}
+                  onClick={() => setActiveComment(comment)}
+                />
               );
             })}
           </CommentsGrid>
@@ -55,7 +58,6 @@ const AllComments = ({ comments, setActiveComment, activeComment, bgColor, isLoa
       )}
     </Container>
   );
-  
 };
 
 export default AllComments;
