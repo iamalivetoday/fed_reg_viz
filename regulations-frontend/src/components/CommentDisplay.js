@@ -40,7 +40,7 @@ const CommentDisplay = ({ comment, onHide }) => {
   return (
     <CommentCard>
       <CommentHeader>
-        <h3>{comment.commenter.firstName} {comment.commenter.lastName}</h3>
+        <h3>{comment.commenter.name} </h3>
         <HideButton onClick={onHide}>Hide</HideButton>
       </CommentHeader>
       <p>{comment.text}</p>
