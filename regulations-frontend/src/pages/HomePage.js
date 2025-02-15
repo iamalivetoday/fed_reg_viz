@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 import Typewriter from 'typewriter-effect';
@@ -59,6 +59,34 @@ const RightContainer = styled.div`
 `;
 
 
+const DocumentsContainer = styled.div`
+  position: absolute;
+  bottom: 40%;
+  right: 10%;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 15px;
+  border-radius: 10px;
+  max-width: 300px;
+`;
+
+const DocumentList = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: 0;
+`;
+
+const DocumentItem = styled.li`
+  margin-bottom: 8px;
+`;
+
+const DocumentLink = styled.a`
+  text-decoration: none;
+  color: #0A3161;
+  font-size: 14px;
+  &:hover {
+    text-decoration: underline;
+  }
+`;
 const NavItem = styled(NavLink)`
   text-decoration: none;
   color: #0A3161;
@@ -96,6 +124,14 @@ const HomePage = () => {
   const handleMouseLeave = () => {
     setHovered(false);
   };
+
+  const [documents, setDocuments] = useState([]);
+  useEffect(() => {
+    fetch("/api/trending-docs")
+      .then(response => response.json())
+      .then(data => setDocuments(data))
+      .catch(error => console.error("Error fetching documents:", error));
+  }, []);
 
   const regulations = [
     { image: ManateeImage, title: "critical habitat designations", link: "https://www.regulations.gov/docket/FWS-R4-ES-2024-0073" },
@@ -178,18 +214,27 @@ const HomePage = () => {
       <HorizontalText>think of our proposed federal regulations?</HorizontalText>
 
       <Navbar>
-        {/* Left side with the search bar */}
         <LeftContainer> 
           <SearchBar/>
         </LeftContainer>
         <br/><br/>
       </Navbar>
 
-        {/* Right side with buttons */}
-        <RightContainer>
-          <NavItem to="/about" activeClassName="active">about</NavItem>
-          <NavItem to="/agencies" activeClassName="active">agencies</NavItem>
-        </RightContainer>
+      <RightContainer>
+        <NavItem to="/about" activeClassName="active">about</NavItem>
+        <NavItem to="/agencies" activeClassName="active">agencies</NavItem>
+      </RightContainer>
+
+      <DocumentsContainer>
+        <h4>Trending Documents</h4>
+        <DocumentList>
+          {documents.map((doc, index) => (
+            <DocumentItem key={index}>
+              <DocumentLink href={doc.link} target="_blank" rel="noopener noreferrer">{doc.title}</DocumentLink>
+            </DocumentItem>
+          ))}
+        </DocumentList>
+      </DocumentsContainer>
     </HomePageContainer>
   );
 };
