@@ -5,6 +5,15 @@ import requests
 import asyncio
 from dotenv import load_dotenv
 
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from bs4 import BeautifulSoup
+import shutil
+
 from google.cloud import language_v2
 from google.api_core.exceptions import GoogleAPICallError, RetryError
 
@@ -271,6 +280,46 @@ async def docket_abstract(docket_id):
 async def home():
     return 'Welcome Madeleine'
 
+def scrape_documents():
+    CHROMEDRIVER_PATH = shutil.which("chromedriver")
+    if not CHROMEDRIVER_PATH:
+        return {"error": "Chromedriver not found!"}
+
+    options = Options()
+    options.add_argument("--headless")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+
+    service = Service(CHROMEDRIVER_PATH)
+    driver = webdriver.Chrome(service=service, options=options)
+
+    documents = []
+    try:
+        driver.get("https://www.regulations.gov")
+
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, "ul.card-secondary-group li"))
+        )
+
+        soup = BeautifulSoup(driver.page_source, "html.parser")
+
+        for li in soup.select("ul.card-secondary-group li"):
+            title = li.select_one("h3.h4").get_text(strip=True) if li.select_one("h3.h4") else "No Title"
+            link = li.select_one("a")["href"] if li.select_one("a") else "#"
+            documents.append({"title": title, "link": f"https://www.regulations.gov{link}"})
+
+    except Exception as e:
+        return {"error": str(e)}
+    finally:
+        driver.quit()
+
+    return documents
+
+@app.route("/api/trending-docs", methods=["GET"])
+def get_trending_documents():
+    return jsonify(scrape_documents())
+
 if __name__ == '__main__':
     import asyncio
     asyncio.run(app.run(debug=True, host='0.0.0.0'))
+
